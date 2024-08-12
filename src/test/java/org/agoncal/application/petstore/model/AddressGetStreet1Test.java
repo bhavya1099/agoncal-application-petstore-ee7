@@ -53,7 +53,7 @@ package org.agoncal.application.petstore.model;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.agoncal.application.petstore.util.Categories;
+// import org.agoncal.application.petstore.util.Categories;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

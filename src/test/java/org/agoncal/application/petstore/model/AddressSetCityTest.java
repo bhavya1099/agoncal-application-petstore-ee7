@@ -49,7 +49,7 @@ package org.agoncal.application.petstore.model;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+// import org.mockito.junit.MockitoJUnitRunner;
 import org.junit.experimental.categories.Category;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,7 +62,7 @@ import java.util.Objects;
 import org.junit.experimental.categories.Category;
 
 @Category({ Categories.setCity.class })
-@RunWith(MockitoJUnitRunner.class)
+// @RunWith(MockitoJUnitRunner.class)
 public class AddressSetCityTest {
 
 	@Test
