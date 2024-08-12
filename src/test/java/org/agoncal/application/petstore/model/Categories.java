@@ -1,6 +1,5 @@
 package org.agoncal.application.petstore.model;
-
-public interface Categories {
+ public interface Categories {
 
 	interface valid {
 
@@ -146,4 +145,31 @@ public interface Categories {
 
 	}
 
+ interface setCreditCardNumber{}
+ interface getCreditCardType{}
+ interface setCreditCardType{}
+ interface getCreditCardExpDate{}
+ interface setCreditCardExpDate{}
+ interface equals{}
+ interface hashCode{}
+ interface toString{}
+ interface calculateAge{}
+ interface update{}
+interface digestPassword{}
+ interface getId{}
+ interface setId{}
+ interface getVersion{}
+ interface setVersion{}
+ interface getLogin{}
+ interface setLogin{}
+ interface getRole{}
+ interface setRole{}
+ interface getUuid{}
+ interface setUuid{}
+ interface getPassword{}
+ interface setPassword{}
+ interface getFirstName{}
+ interface setFirstName{}
+ interface getLastName{}
+ interface setLastName{}
 }
