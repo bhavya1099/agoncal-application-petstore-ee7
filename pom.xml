@@ -216,13 +216,7 @@
         <scope>compile</scope>
         <!--Dependency added by RoostGPT-->
       </dependency>
-      <dependency>
-        <groupId>org.junit</groupId>
-        <artifactId>junit-bom</artifactId>
-        <version>5.8.2</version>
-        <scope>compile</scope>
-        <!--Dependency added by RoostGPT-->
-      </dependency>
+   
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -371,13 +365,7 @@
       <scope>compile</scope>
       <!--Dependency added by RoostGPT-->
     </dependency>
-    <dependency>
-      <groupId>org.junit</groupId>
-      <artifactId>junit-bom</artifactId>
-      <version>5.8.2</version>
-      <scope>compile</scope>
-      <!--Dependency added by RoostGPT-->
-    </dependency>
+    
     <!-- TEST -->
     <dependency>
       <groupId>nl.jqno.equalsverifier</groupId>
