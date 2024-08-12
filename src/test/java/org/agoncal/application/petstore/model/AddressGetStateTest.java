@@ -67,8 +67,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import org.junit.experimental.categories.Category;
 
-@Category({ Categories.getState.class })
-@Category(Categories.valid.class)
+@Category({ Categories.getState.class,Categories.valid.class })
 @RunWith(Parameterized.class)
 public class AddressGetStateTest {
 

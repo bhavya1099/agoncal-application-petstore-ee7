@@ -64,6 +64,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import org.junit.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
