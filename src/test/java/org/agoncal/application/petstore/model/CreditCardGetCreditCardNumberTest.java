@@ -134,7 +134,7 @@ public class CreditCardGetCreditCardNumberTest {
     @Test
     public void testGetCreditCardNumberAfterSettingOtherFields() {
         // Modified to use the correct enum reference
-        CreditCard fullCreditCard = new CreditCard("9876543210987654", CreditCard.CreditCardType.VISA, "12/25");
+        CreditCard fullCreditCard = new CreditCard("9876543210987654", CreditCardType.VISA, "12/25");
         assertEquals("9876543210987654", fullCreditCard.getCreditCardNumber());
     }
 }

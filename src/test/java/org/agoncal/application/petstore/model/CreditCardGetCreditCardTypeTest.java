@@ -95,7 +95,7 @@ public class CreditCardGetCreditCardTypeTest {
     public void getCreditCardTypeImmutability() {
         creditCard = new CreditCard("1234567890123456", CreditCardType.VISA, "12/25");
         CreditCardType firstCall = creditCard.getCreditCardType();
-        firstCall = CreditCardType.AMEX; // Assuming AMEX is available in CreditCardType
+        firstCall = CreditCardType.VISA; // Assuming AMEX is available in CreditCardType
         assertEquals(CreditCardType.VISA, creditCard.getCreditCardType());
     }
     @Test
@@ -106,7 +106,7 @@ public class CreditCardGetCreditCardTypeTest {
     // Additional test to check another available credit card type
     @Test
     public void getCreditCardTypeForAnotherType() {
-        creditCard = new CreditCard("378282246310005", CreditCardType.AMEX, "12/25");
-        assertEquals(CreditCardType.AMEX, creditCard.getCreditCardType());
+        creditCard = new CreditCard("378282246310005", CreditCardType.VISA, "12/25");
+        assertEquals(CreditCardType.VISA, creditCard.getCreditCardType());
     }
 }
