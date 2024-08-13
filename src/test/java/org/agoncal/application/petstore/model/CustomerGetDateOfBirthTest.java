@@ -121,7 +121,7 @@ public class CustomerGetDateOfBirthTest {
         Date dob = cal.getTime();
         
         customer.setDateOfBirth(dob);
-        customer.setAge(25);
+        //customer.setAge(25);
         
         Date returnedDob = customer.getDateOfBirth();
         Calendar returnedCal = Calendar.getInstance();
