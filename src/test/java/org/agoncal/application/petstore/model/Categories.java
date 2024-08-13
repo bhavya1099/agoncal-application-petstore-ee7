@@ -147,16 +147,10 @@ package org.agoncal.application.petstore.model;
  interface setCreditCardType{}
  interface getCreditCardExpDate{}
  interface setCreditCardExpDate{}
- interface equals{}
- interface hashCode{}
- interface toString{}
+
  interface calculateAge{}
  interface update{}
 interface digestPassword{}
- interface getId{}
- interface setId{}
- interface getVersion{}
- interface setVersion{}
  interface getLogin{}
  interface setLogin{}
  interface getRole{}
