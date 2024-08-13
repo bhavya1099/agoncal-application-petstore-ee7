@@ -68,9 +68,9 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
-import org.junit.experimental.categories.Category;
 
-@Category({ Categories.getId.class })
+
+@org.junit.experimental.categories.Category({ Categories.getId.class })
 public class CategoryGetIdTest {
 
 	private Category category;

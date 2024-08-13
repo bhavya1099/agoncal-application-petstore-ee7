@@ -67,9 +67,9 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
-import org.junit.experimental.categories.Category;
+// import org.junit.experimental.categories.Category;
 
-@Category({ Categories.toString.class })
+@org.junit.experimental.categories.Category({ Categories.toString.class })
 public class CategoryToStringTest {
 
 	@Test

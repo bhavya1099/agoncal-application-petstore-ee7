@@ -77,23 +77,23 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import org.junit.experimental.categories.Category;
 
-@Category({ Categories.hashCode.class })
+
+@org.junit.experimental.categories.Category({ Categories.hashCode.class })
 public class CategoryHashCodeTest {
 
 	@Test
 	public void consistentHashCodeForSameName() {
-		Category category1 = new Category("Electronics");
-		Category category2 = new Category("Electronics");
+		Category category1 = new Category("Electronics","");
+		Category category2 = new Category("Electronics","");
 
 		assertEquals(category1.hashCode(), category2.hashCode());
 	}
 
 	@Test
 	public void differentHashCodesForDifferentNames() {
-		Category category1 = new Category("Electronics");
-		Category category2 = new Category("Books");
+		Category category1 = new Category("Electronics","");
+		Category category2 = new Category("Books","");
 
 		assertNotEquals(category1.hashCode(), category2.hashCode());
 	}
@@ -107,7 +107,7 @@ public class CategoryHashCodeTest {
 
 	@Test
 	public void hashCodeConsistencyAcrossInvocations() {
-		Category category = new Category("Electronics");
+		Category category = new Category("Electronics","");
 
 		int hashCode1 = category.hashCode();
 		int hashCode2 = category.hashCode();
@@ -119,17 +119,15 @@ public class CategoryHashCodeTest {
 
 	@Test
 	public void hashCodeIndependenceFromOtherFields() {
-		Category category1 = new Category("Electronics");
-		category1.setDescription("Description 1");
-		Category category2 = new Category("Electronics");
-		category2.setDescription("Description 2");
+		Category category1 = new Category("Electronics","Description 1");
+		Category category2 = new Category("Electronics","Description 2");
 
 		assertEquals(category1.hashCode(), category2.hashCode());
 	}
 
 	@Test
 	public void hashCodeForEmptyStringName() {
-		Category category = new Category("");
+		Category category = new Category();
 
 		assertEquals(Objects.hash(""), category.hashCode());
 	}
