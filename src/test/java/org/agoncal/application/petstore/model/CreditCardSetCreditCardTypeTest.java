@@ -91,8 +91,8 @@ public class CreditCardSetCreditCardTypeTest {
     }
     @Test
     public void changeCreditCardType() {
-        CreditCardType initialType = CreditCardType.MASTERCARD;
-        CreditCardType newType = CreditCardType.AMEX;
+        CreditCardType initialType = CreditCardType.MASTER_CARD;
+        CreditCardType newType = CreditCardType.VISA;
         
         creditCard.setCreditCardType(initialType);
         assertEquals(initialType, creditCard.getCreditCardType());

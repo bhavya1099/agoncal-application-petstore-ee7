@@ -86,14 +86,14 @@ public class CreditCardHashCodeTest {
     }
     @Test
     public void hashCodeConsistencyWithEqualObjects() {
-        CreditCard creditCard1 = new CreditCard("1234567890123456", CreditCardType.MASTERCARD, "12/25");
-        CreditCard creditCard2 = new CreditCard("1234567890123456", CreditCardType.MASTERCARD, "12/25");
+        CreditCard creditCard1 = new CreditCard("1234567890123456", CreditCardType.MASTER_CARD, "12/25");
+        CreditCard creditCard2 = new CreditCard("1234567890123456", CreditCardType.MASTER_CARD, "12/25");
         assertEquals(creditCard1.hashCode(), creditCard2.hashCode());
     }
     @Test
     public void hashCodeWithDifferentCreditCardTypes() {
         CreditCard creditCard1 = new CreditCard("1234567890123456", CreditCardType.VISA, "12/25");
-        CreditCard creditCard2 = new CreditCard("1234567890123456", CreditCardType.MASTERCARD, "12/25");
+        CreditCard creditCard2 = new CreditCard("1234567890123456", CreditCardType.MASTER_CARD, "12/25");
         assertNotEquals(creditCard1.hashCode(), creditCard2.hashCode());
     }
     @Test

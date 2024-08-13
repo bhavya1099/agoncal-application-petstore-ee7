@@ -108,7 +108,7 @@ public class CreditCardEqualsTest {
     @Test
     public void differentCreditCardTypes() {
         CreditCard card1 = new CreditCard("1234567890123456", CreditCardType.VISA, "12/25");
-        CreditCard card2 = new CreditCard("1234567890123456", CreditCardType.MASTERCARD, "12/25");
+        CreditCard card2 = new CreditCard("1234567890123456", CreditCardType.MASTER_CARD, "12/25");
         assertFalse(card1.equals(card2));
     }
     @Test

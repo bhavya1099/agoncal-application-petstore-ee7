@@ -93,15 +93,15 @@ public class CreditCardGetCreditCardExpDateTest {
         String initialExpDate = "01/23";
         String updatedExpDate = "05/24";
         // TODO: Ensure that CreditCardType.MASTERCARD is correctly defined in the CreditCardType enum
-        creditCard = new CreditCard("1234567890123456", CreditCardType.MASTERCARD, initialExpDate);
-        creditCard = new CreditCard("1234567890123456", CreditCardType.MASTERCARD, updatedExpDate);
+        creditCard = new CreditCard("1234567890123456", CreditCardType.MASTER_CARD, initialExpDate);
+        creditCard = new CreditCard("1234567890123456", CreditCardType.MASTER_CARD, updatedExpDate);
         assertEquals(updatedExpDate, creditCard.getCreditCardExpDate());
     }
     @Test
     public void getCreditCardExpDateWithInvalidFormat() {
         String invalidExpDate = "1225";
         // TODO: Ensure that CreditCardType.AMEX is correctly defined in the CreditCardType enum
-        creditCard = new CreditCard("1234567890123456", CreditCardType.AMEX, invalidExpDate);
+        creditCard = new CreditCard("1234567890123456", CreditCardType.VISA, invalidExpDate);
         assertEquals(invalidExpDate, creditCard.getCreditCardExpDate());
     }
     @Test
