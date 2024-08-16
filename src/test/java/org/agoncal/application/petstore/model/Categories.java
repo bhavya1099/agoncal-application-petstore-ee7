@@ -142,4 +142,34 @@ package org.agoncal.application.petstore.model;
 	}
 
  interface setNumcode{}
+ interface equals{}
+ 
+ interface hashCode{}
+ 
+ interface toString{}
+ 
+ interface getCreditCardNumber{}
+ 
+ interface setCreditCardNumber{}
+ 
+ interface getCreditCardType{}
+ 
+ interface setCreditCardType{}
+ 
+ interface getCreditCardExpDate{}
+ 
+ interface setCreditCardExpDate{}
+ 
+ 
+ 
+ 
+ interface calculateAge{}
+ 
+ interface digestPassword{}
+ interface update{}
+ interface getId{}
+ 
+ interface setId{}
+ 
+ interface getVersion{}
 }
