@@ -67,9 +67,8 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
-import org.junit.experimental.categories.Category;
 
-@Category({ Categories.equals.class })
+@org.junit.experimental.categories.Category({ Categories.equals.class })
 public class CategoryEqualsTest {
 
 	@Test
