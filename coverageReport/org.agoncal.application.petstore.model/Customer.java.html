@@ -127,21 +127,21 @@ public class Customer implements Serializable {
 	@PostPersist
 	@PostUpdate
 	public void calculateAge() {
-<span class="fc bfc" id="L130" title="All 2 branches covered.">		if (dateOfBirth == null) {</span>
-<span class="fc" id="L131">			age = null;</span>
-<span class="fc" id="L132">			return;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">		if (dateOfBirth == null) {</span>
+<span class="nc" id="L131">			age = null;</span>
+<span class="nc" id="L132">			return;</span>
 		}
 
-<span class="fc" id="L135">		Calendar birth = new GregorianCalendar();</span>
-<span class="fc" id="L136">		birth.setTime(dateOfBirth);</span>
-<span class="fc" id="L137">		Calendar now = new GregorianCalendar();</span>
-<span class="fc" id="L138">		now.setTime(new Date());</span>
-<span class="fc" id="L139">		int adjust = 0;</span>
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">		if (now.get(Calendar.DAY_OF_YEAR) - birth.get(Calendar.DAY_OF_YEAR) &lt; 0) {</span>
+<span class="nc" id="L135">		Calendar birth = new GregorianCalendar();</span>
+<span class="nc" id="L136">		birth.setTime(dateOfBirth);</span>
+<span class="nc" id="L137">		Calendar now = new GregorianCalendar();</span>
+<span class="nc" id="L138">		now.setTime(new Date());</span>
+<span class="nc" id="L139">		int adjust = 0;</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">		if (now.get(Calendar.DAY_OF_YEAR) - birth.get(Calendar.DAY_OF_YEAR) &lt; 0) {</span>
 <span class="nc" id="L141">			adjust = -1;</span>
 		}
-<span class="fc" id="L143">		age = now.get(Calendar.YEAR) - birth.get(Calendar.YEAR) + adjust;</span>
-<span class="fc" id="L144">	}</span>
+<span class="nc" id="L143">		age = now.get(Calendar.YEAR) - birth.get(Calendar.YEAR) + adjust;</span>
+<span class="nc" id="L144">	}</span>
 
 	@PrePersist
 	private void digestPassword() {
@@ -164,8 +164,8 @@ public class Customer implements Serializable {
 <span class="fc" id="L164">			byte[] passwordDigest = md.digest();</span>
 <span class="fc" id="L165">			return Base64.getEncoder().encodeToString(passwordDigest);</span>
 		}
-<span class="fc" id="L167">		catch (Exception e) {</span>
-<span class="fc" id="L168">			throw new RuntimeException(&quot;Exception encoding password&quot;, e);</span>
+<span class="nc" id="L167">		catch (Exception e) {</span>
+<span class="nc" id="L168">			throw new RuntimeException(&quot;Exception encoding password&quot;, e);</span>
 		}
 	}
 
@@ -174,12 +174,12 @@ public class Customer implements Serializable {
 	// ======================================
 
 	public Long getId() {
-<span class="fc" id="L177">		return this.id;</span>
+<span class="nc" id="L177">		return this.id;</span>
 	}
 
 	public void setId(final Long id) {
-<span class="fc" id="L181">		this.id = id;</span>
-<span class="fc" id="L182">	}</span>
+<span class="nc" id="L181">		this.id = id;</span>
+<span class="nc" id="L182">	}</span>
 
 	public int getVersion() {
 <span class="nc" id="L185">		return this.version;</span>
@@ -262,11 +262,11 @@ public class Customer implements Serializable {
 	}
 
 	public void setDateOfBirth(Date dateOfBirth) {
-<span class="fc" id="L265">		this.dateOfBirth = dateOfBirth;</span>
-<span class="fc" id="L266">	}</span>
+<span class="nc" id="L265">		this.dateOfBirth = dateOfBirth;</span>
+<span class="nc" id="L266">	}</span>
 
 	public Integer getAge() {
-<span class="fc" id="L269">		return age;</span>
+<span class="nc" id="L269">		return age;</span>
 	}
 
 	public Address getHomeAddress() {
