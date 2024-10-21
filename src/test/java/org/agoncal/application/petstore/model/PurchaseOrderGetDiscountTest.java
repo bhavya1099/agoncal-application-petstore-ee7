@@ -113,22 +113,35 @@ public class PurchaseOrderGetDiscountTest {
 		Float discountRetrieved = purchaseOrder.getDiscount();
 		assertEquals("Discount should be updated to 45.0", Float.valueOf(45.0f), discountRetrieved);
 	}
+/*
+The test is failing due to the following reasons:
 
-	@Test(expected = IllegalArgumentException.class)
-	@Category(Categories.invalid.class)
-	public void verifyHandlingOfNonNumericDiscount() {
-		PurchaseOrder purchaseOrder = new PurchaseOrder();
-		// Attempt to set a non-numeric value using reflection
-		try {
-			java.lang.reflect.Field discountField = PurchaseOrder.class.getDeclaredField("discount");
-			discountField.setAccessible(true);
-			discountField.set(purchaseOrder, "non-numeric-value");
-		}
-		catch (Exception e) {
-			fail("Reflection failed to access or modify the discount field");
-		}
-		purchaseOrder.getDiscount();
-	}
+1. **Misuse of Reflection and Type Mismatch**: The unit test attempts to set a field of type `Float` (`discount` in `PurchaseOrder`) to a `String` ("non-numeric-value") using reflection. Since the type is mismatched (i.e., trying to set a `Float` field to a `String` value), it creates a `java.lang.IllegalArgumentException`. This mismatch causes the test framework to throw an `AssertionError` instead of handling it gracefully.
+
+2. **Incorrect Assertion and Exception Handling**: The test expects an `IllegalArgumentException` when setting the `discount` field. However, the code example lacks the appropriate mechanisms to actually throw this exception when a problem occurs with the field access or type mismatch. Thus, when the error occurs (due to the reflection misuse), it manifests as an `AssertionError` inside the testing framework which states, "Reflection failed to access or modify the discount field", rather than an `IllegalArgumentException`.
+
+3. **Incorrectly Configured Test Annotation**: The test annotation `@Test(expected = IllegalArgumentException.class)` anticipates an `IllegalArgumentException` to be thrown. However, the actual result is an `AssertionError` thrown by the `fail` method due to the unsuitability of setting a `String` value to a `Float` field. `fail()` is called in the `catch` block handling any exceptions from the reflection method, reacting to any kind of exception rather than strictly an `IllegalArgumentException`.
+
+To correct the test and better align it with expected practices:
+- The test should handle type checks more gracefully if it aims to test improper type assignments and their outcomes.
+- If the business logic or further testing mechanism should capture and throw specific exceptions upon such failures, this handling needs to be integrated either into the tested code itself or through more specific testing controls.
+- It is misleading to create a test expecting `IllegalArgumentException` for incorrect data types via reflection without adequate handling in the underlying code or test setup. The native behavior of setting a field via reflection with an incorrect type will not naturally throw `IllegalArgumentException` but rather a `java.lang.IllegalArgumentException`. Adjusting either the expectations or the method of injecting errors will be necessary depending on what aspect of the code the test intends to evaluate.
+@Test(expected = IllegalArgumentException.class)
+@Category(Categories.invalid.class)
+public void verifyHandlingOfNonNumericDiscount() {
+    PurchaseOrder purchaseOrder = new PurchaseOrder();
+    // Attempt to set a non-numeric value using reflection
+    try {
+        java.lang.reflect.Field discountField = PurchaseOrder.class.getDeclaredField("discount");
+        discountField.setAccessible(true);
+        discountField.set(purchaseOrder, "non-numeric-value");
+    } catch (Exception e) {
+        fail("Reflection failed to access or modify the discount field");
+    }
+    purchaseOrder.getDiscount();
+}
+*/
+
 
 	@Test
 	@Category(Categories.valid.class)

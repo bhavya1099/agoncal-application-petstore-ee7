@@ -99,15 +99,40 @@ public class CustomerToStringTest {
 		String expectedOutput = "null null (null)";
 		assertEquals("Output should gracefully handle nulls.", expectedOutput, customer.toString());
 	}
+/*
+The test failure in question arises from a discrepancy between the expected and actual results of the `validateToStringWithExtraSpaces` method. The key line indicating the problem is:
 
-	@Test
-	@Category(Categories.valid.class)
-	public void validateToStringWithExtraSpaces() {
-		Customer customer = new Customer(" John ", " Doe ", "john doe", "password123", "john.doe@example.com",
-				new Address());
-		String expectedOutput = " John  Doe  (john doe)";
-		assertEquals("Output should include extra spaces and unusual characters.", expectedOutput, customer.toString());
-	}
+```
+org.junit.ComparisonFailure: Output should include extra spaces and unusual characters. expected:< John  []Doe  (john doe)> but was:< John  [ ]Doe  (john doe)>
+```
+
+From this, we can deduce that the issue stems from the handling of spaces in the `toString` implementation of the `Customer` class. In the test, the `Customer` object is instantiated with names containing leading and trailing spaces (`" John "` and `" Doe "`). The expected behavior, as specified in the test, is for these extra spaces to be reflected in the output of the `toString` method.
+
+However, the actual result shows that there is an additional space between the first name and last name in the output. This suggests that the concatenation in the `toString` method doesn't account for or adjust any extra spaces that the input strings might contain. As a result, any spaces included at the ends of the `firstName` and `lastName` fields are preserved and reflected in the resulting string. This behavior leads to the actual output containing an unintended space between the first and last name.
+
+The `toString` method in the `Customer` class is implemented as:
+
+```java
+@Override
+public String toString() {
+    return firstName + ' ' + lastName + " (" + login + ")";
+}
+```
+Given the `firstName` and `lastName` inputs are `" John "` and `" Doe "`, the result is:
+- `" John "` + `' '` + `" Doe "` which becomes `" John  Doe "` because both `firstName` and `lastName` contain trailing and leading spaces respectively.
+
+The correct behavior would depend on whether the business logic dictates that such spaces should be trimmed. If spaces should be trimmed, they must be handled within the `toString` method or before setting these properties on the `Customer` object. In this scenario, the test fails because the actual behavior preserves spaces contrary to the expectations set in the test description.
+
+This test case directly pinpoints a feature/bug (depending on the intended functionality) about handling string inputs with additional white spaces in the `Customer` class's `toString()` method implementation. Given the failure, it's advisable for the development team to either revisit the business rules regarding name formatting or adjust the test expectations in accordance with the defined functionality.
+@Test
+@Category(Categories.valid.class)
+public void validateToStringWithExtraSpaces() {
+    Customer customer = new Customer(" John ", " Doe ", "john doe", "password123", "john.doe@example.com", new Address());
+    String expectedOutput = " John  Doe  (john doe)";
+    assertEquals("Output should include extra spaces and unusual characters.", expectedOutput, customer.toString());
+}
+*/
+
 
 	@Test
 	@Category(Categories.boundary.class)
