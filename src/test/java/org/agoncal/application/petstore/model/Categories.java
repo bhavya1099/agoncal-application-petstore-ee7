@@ -26,4 +26,12 @@ public interface Categories {
 
 	}
 
+	interface digestPassword {
+
+	}
+
+	interface equals {
+
+	}
+
 }
