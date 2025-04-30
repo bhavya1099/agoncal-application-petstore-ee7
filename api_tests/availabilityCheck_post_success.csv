@@ -1,0 +1,11 @@
+subscriberId^|^complements^|^statusCode^|^scenario
+SVTL001^|^ES:ARC201,DE:TRP102,FR:PLM205^|^200^|^Address with complements
+SVTL002^|^EN:SGH301,PL:LPD113,IT:CMU209^|^200^|^Address with complements
+SVTL003^|^FR:CPM105,ES:TRP401,DE:KOL303^|^200^|^Address with complements
+SVTL004^|^ES:ARC201,DE:TRP102,FR:PLM205^|^200^|^Address with complements
+SVTL005^|^EN:FZR209,PL:FCB513,IT:EFL409^|^200^|^Address with complements
+SVTL006^|^FR:EPQ305,ES:LPM701,DE:RAN103^|^200^|^Address with complements
+SVTL007^|^ ^|^404^|^Address without complements
+SVTL008^|^^|^404^|^Address without complements
+SVTL009^|^ES:ARC201,EN:TRP102,DE:SGF205^|^200^|^Address with complements
+SVTL010^|^FR:EPQ305,PL:LPM701,IT:KOL103^|^200^|^Address with complements
