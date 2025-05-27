@@ -1,0 +1,11 @@
+subscriberId^|^id^|^complement^|^statusCode^|^scenario
+SVTL001^|^14393^|^ES:ARC201^|^200^|^address_with_complement
+SVTL002^|^2449^|^NA:NA^|^200^|^address_without_complement
+SVTL003^|^5974^|^APT:301B^|^200^|^address_with_complement
+SVTL004^|^8230^|^BLK:A^|^200^|^address_with_complement
+SVTL005^|^6783^|^FLR:2^|^200^|^address_with_complement
+SVTL006^|^3569^|^NA:NA^|^200^|^address_without_complement
+SVTL007^|^4801^|^UNIT:B^|^200^|^address_with_complement
+SVTL008^|^1390^|^NA:NA^|^200^|^address_without_complement
+SVTL009^|^5894^|^SUITE:100^|^200^|^address_with_complement
+SVTL010^|^2410^|^BLDG:7^|^200^|^address_with_complement
