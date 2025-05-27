@@ -1,0 +1,11 @@
+subscriberId^|^addressId^|^statusCode^|^scenario
+SVTL001^|^14393^|^_active^|^residential
+SVTL002^|^56342^|^active^|^commercial
+SVTL003^|^23489^|^active^|^residential
+SVTL004^|^87653^|^inactive^|^commercial
+SVTL005^|^98734^|^active^|^residential
+SVTL006^|^56479^|^inactive^|^commercial
+SVTL007^|^67589^|^active^|^residential
+SVTL008^|^78643^|^active^|^commercial
+SVTL009^|^35126^|^inactive^|^residential
+SVTL010^|^46789^|^active^|^commercial
