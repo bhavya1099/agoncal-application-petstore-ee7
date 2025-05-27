@@ -1,0 +1,11 @@
+subscriberId^|^id^|^type^|^description^|^value^|^statusCode^|^scenario
+SVTL001^|^1324^|^ES^|^Complementary Address^|^ARC201^|^200^|^Address with complement
+SVTL002^|^14393^|^ES^|^Extra Services^|^N/A^|^404^|^Address without complement
+SVTL003^|^457^|^WZ^|^Warehouse Zone^|^WZ09^|^200^|^N/A
+SVTL004^|^2449^|^/N^|^Description contains "quote"^|^'Value with single quote'^|^400^|^Faulty scenario
+SVTL005^|^986^|^TR^|^Transit Route^|^TR45^|^200^|^N/A
+BAH006^|^7890^|^RB^|^Residential Building^|^RB003^|^503^|^Address with complement
+XYZ007^|^1732^|^PD^|^Product Delivery^|^PD009^|^200^|^Address without complement
+BAH008^|^3491^|^^|^Missing type value^|^VAL004^|^200^|^Faulty scenario
+XYZ009^|^8645^|^FT^|^Faulty Type^|^Extra long value that should be truncated during processing^|^400^|^Address with complement
+SVTL010^|^1932^|^GS^|^Garage Space^|^GS007^|^200^|^Address without complement
