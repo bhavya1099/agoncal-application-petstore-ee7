@@ -1,5 +1,3 @@
-//This test file is marked invalid as it contains compilation errors. Change the extension to of this file to .java, to manually edit its contents
-
 
 // ********RoostGPT********
 /*
@@ -23,49 +21,42 @@ Execution:
 Validation:  
   This test verifies the method's behavior when the dateOfBirth field is null. The expected result ensures that the application prevents any age computation in this case, adhering to the logic of ensuring valid input data before processing.
 
+
+roost_feedback [21/08/2025, 6:17:43 AM]:Modify\sCode\sto\sfix\sthis\serror\n[48,17]\sdateOfBirth\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer\n[52,28]\sage\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer\n[60,17]\sdateOfBirth\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer\n[68,40]\sage\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer\n[76,17]\sdateOfBirth\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer\n[84,40]\sage\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer\n[92,17]\sdateOfBirth\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer\n[100,40]\sage\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer\n[108,17]\sdateOfBirth\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer\n[116,40]\sage\shas\sprivate\saccess\sin\sorg.agoncal.application.petstore.model.Customer
 */
 
 // ********RoostGPT********
 
 package org.agoncal.application.petstore.model;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Tag;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import org.junit.jupiter.api.*;
-import org.agoncal.application.petstore.constraints.Email;
-import org.agoncal.application.petstore.constraints.Login;
-import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
-import java.security.MessageDigest;
-import java.util.*;
 
 public class CustomerCalculateAgeTest {
+
     @Test
     @Tag("invalid")
     public void calculateAgeWithNullDateOfBirth() {
         // Arrange
         Customer customer = new Customer();
-        customer.dateOfBirth = null; // TODO: Ensure the field is set to null in the original class
+        customer.setDateOfBirth(null);
         // Act
         customer.calculateAge();
         // Assert
-        assertNull(customer.age, "Age must be null when dateOfBirth is null");
+        assertNull(customer.getAge(), "Age must be null when dateOfBirth is null");
     }
+
     @Test
     @Tag("boundary")
     public void calculateAgeWithSameDayAndMonthDifferentYear() {
         // Arrange
         Customer customer = new Customer();
         Calendar birthDate = new GregorianCalendar(2000, Calendar.JANUARY, 1);
-        customer.dateOfBirth = birthDate.getTime();
+        customer.setDateOfBirth(birthDate.getTime());
         Calendar today = new GregorianCalendar();
         today.set(Calendar.YEAR, 2021);
         today.set(Calendar.MONTH, Calendar.JANUARY);
@@ -73,15 +64,16 @@ public class CustomerCalculateAgeTest {
         // Act
         customer.calculateAge();
         // Assert
-        assertEquals(21, (int) customer.age, "Age must be correctly calculated for same day and month with different year");
+        assertEquals(21, (int) customer.getAge(), "Age must be correctly calculated for same day and month with different year");
     }
+
     @Test
     @Tag("boundary")
     public void calculateAgeWithDifferentDayAndMonth() {
         // Arrange
         Customer customer = new Customer();
         Calendar birthDate = new GregorianCalendar(2000, Calendar.FEBRUARY, 15);
-        customer.dateOfBirth = birthDate.getTime();
+        customer.setDateOfBirth(birthDate.getTime());
         Calendar today = new GregorianCalendar();
         today.set(Calendar.YEAR, 2021);
         today.set(Calendar.MONTH, Calendar.JANUARY);
@@ -89,15 +81,16 @@ public class CustomerCalculateAgeTest {
         // Act
         customer.calculateAge();
         // Assert
-        assertEquals(20, (int) customer.age, "Age must be calculated correctly when month or day prevents incrementing by year");
+        assertEquals(20, (int) customer.getAge(), "Age must be calculated correctly when month or day prevents incrementing by year");
     }
+
     @Test
     @Tag("boundary")
     public void calculateAgeWithSingleDayBeforeBirthday() {
         // Arrange
         Customer customer = new Customer();
         Calendar birthDate = new GregorianCalendar(2000, Calendar.JANUARY, 2);
-        customer.dateOfBirth = birthDate.getTime();
+        customer.setDateOfBirth(birthDate.getTime());
         Calendar today = new GregorianCalendar();
         today.set(Calendar.YEAR, 2021);
         today.set(Calendar.MONTH, Calendar.JANUARY);
@@ -105,15 +98,16 @@ public class CustomerCalculateAgeTest {
         // Act
         customer.calculateAge();
         // Assert
-        assertEquals(20, (int) customer.age, "Age must be correctly adjusted when one day before birthday");
+        assertEquals(20, (int) customer.getAge(), "Age must be correctly adjusted when one day before birthday");
     }
+
     @Test
     @Tag("valid")
     public void calculateAgeWithExactBirthdayToday() {
         // Arrange
         Customer customer = new Customer();
         Calendar birthDate = new GregorianCalendar(2000, Calendar.MARCH, 1);
-        customer.dateOfBirth = birthDate.getTime();
+        customer.setDateOfBirth(birthDate.getTime());
         Calendar today = new GregorianCalendar();
         today.set(Calendar.YEAR, 2021);
         today.set(Calendar.MONTH, Calendar.MARCH);
@@ -121,6 +115,6 @@ public class CustomerCalculateAgeTest {
         // Act
         customer.calculateAge();
         // Assert
-        assertEquals(21, (int) customer.age, "Age should be incremented by one year exactly when birthday");
+        assertEquals(21, (int) customer.getAge(), "Age should be incremented by one year exactly when birthday");
     }
 }
