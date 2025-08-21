@@ -10,36 +10,35 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 
 /**
- * @author Antonio Goncalves http://www.antoniogoncalves.org -- This interceptor catches
- * exception and displayes them in a JSF page
+ * @author Antonio Goncalves
+ *         http://www.antoniogoncalves.org
+ *         --
+ *         This interceptor catches exception and displayes them in a JSF page
  */
 
 @Interceptor
 @CatchException
-<span class="nc" id="L19">public class ExceptionInterceptor implements Serializable {</span>
+<span class="nc" id="L21">public class ExceptionInterceptor implements Serializable {</span>
 
-	@Inject
-	private Logger log;
+    @Inject
+    private Logger log;
 
-	@AroundInvoke
-	public Object catchException(InvocationContext ic) throws Exception {
-		try {
-<span class="nc" id="L27">			return ic.proceed();</span>
-		}
-<span class="nc" id="L29">		catch (Exception e) {</span>
-<span class="nc" id="L30">			addErrorMessage(e.getMessage());</span>
-<span class="nc" id="L31">			log.severe(&quot;/!\\ &quot; + ic.getTarget().getClass().getName() + &quot; - &quot; + ic.getMethod().getName() + &quot; - &quot;</span>
-<span class="nc" id="L32">					+ e.getMessage());</span>
-<span class="nc" id="L33">			e.printStackTrace();</span>
-		}
-<span class="nc" id="L35">		return null;</span>
-	}
+    @AroundInvoke
+    public Object catchException(InvocationContext ic) throws Exception {
+        try {
+<span class="nc" id="L29">            return ic.proceed();</span>
+<span class="nc" id="L30">        } catch (Exception e) {</span>
+<span class="nc" id="L31">            addErrorMessage(e.getMessage());</span>
+<span class="nc" id="L32">            log.severe(&quot;/!\\ &quot; + ic.getTarget().getClass().getName() + &quot; - &quot; + ic.getMethod().getName() + &quot; - &quot; + e.getMessage());</span>
+<span class="nc" id="L33">            e.printStackTrace();</span>
+        }
+<span class="nc" id="L35">        return null;</span>
+    }
 
-	// TODO to refactor with Controller methods
-	protected void addErrorMessage(String message) {
-<span class="nc" id="L40">		FacesContext context = FacesContext.getCurrentInstance();</span>
-<span class="nc" id="L41">		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));</span>
-<span class="nc" id="L42">	}</span>
-
+    // TODO to refactor with Controller methods
+    protected void addErrorMessage(String message) {
+<span class="nc" id="L40">        FacesContext context = FacesContext.getCurrentInstance();</span>
+<span class="nc" id="L41">        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));</span>
+<span class="nc" id="L42">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

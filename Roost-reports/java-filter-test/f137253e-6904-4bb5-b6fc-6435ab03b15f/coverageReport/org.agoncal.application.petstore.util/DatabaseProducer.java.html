@@ -5,18 +5,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * @author Antonio Goncalves http://www.antoniogoncalves.org --
+ * @author Antonio Goncalves
+ *         http://www.antoniogoncalves.org
+ *         --
  */
 
-<span class="nc" id="L11">public class DatabaseProducer {</span>
+<span class="nc" id="L13">public class DatabaseProducer </span>
+{
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+    // ======================================
+    // =             Attributes             =
+    // ======================================
 
-	@Produces
-	@PersistenceContext(unitName = &quot;applicationPetstorePU&quot;)
-	private EntityManager em;
-
+    @Produces
+    @PersistenceContext(unitName = &quot;applicationPetstorePU&quot;)
+    private EntityManager em;
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

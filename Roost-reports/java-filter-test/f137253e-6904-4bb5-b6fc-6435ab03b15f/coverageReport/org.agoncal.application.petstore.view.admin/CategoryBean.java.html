@@ -30,257 +30,301 @@ import org.agoncal.application.petstore.util.Loggable;
 /**
  * Backing bean for Category entities.
  * &lt;p/&gt;
- * This class provides CRUD functionality for all Category entities. It focuses purely on
- * Java EE 6 standards (e.g. &lt;tt&gt;&amp;#64;ConversationScoped&lt;/tt&gt; for state management,
- * &lt;tt&gt;PersistenceContext&lt;/tt&gt; for persistence, &lt;tt&gt;CriteriaBuilder&lt;/tt&gt; for searches)
- * rather than introducing a CRUD framework or custom base class.
+ * This class provides CRUD functionality for all Category entities. It focuses
+ * purely on Java EE 6 standards (e.g. &lt;tt&gt;&amp;#64;ConversationScoped&lt;/tt&gt; for
+ * state management, &lt;tt&gt;PersistenceContext&lt;/tt&gt; for persistence,
+ * &lt;tt&gt;CriteriaBuilder&lt;/tt&gt; for searches) rather than introducing a CRUD framework or
+ * custom base class.
  */
 
 @Named
 @Stateful
 @ConversationScoped
 @Loggable
-<span class="nc" id="L43">public class CategoryBean implements Serializable {</span>
-
-	private static final long serialVersionUID = 1L;
-
-	/*
-	 * Support creating and retrieving Category entities
-	 */
-
-	private Long id;
-
-	public Long getId() {
-<span class="nc" id="L54">		return this.id;</span>
-	}
-
-	public void setId(Long id) {
-<span class="nc" id="L58">		this.id = id;</span>
-<span class="nc" id="L59">	}</span>
-
-	private Category category;
-
-	public Category getCategory() {
-<span class="nc" id="L64">		return this.category;</span>
-	}
-
-	public void setCategory(Category category) {
-<span class="nc" id="L68">		this.category = category;</span>
-<span class="nc" id="L69">	}</span>
-
-	@Inject
-	private Conversation conversation;
-
-	@PersistenceContext(unitName = &quot;applicationPetstorePU&quot;, type = PersistenceContextType.EXTENDED)
-	private EntityManager entityManager;
-
-	public String create() {
-
-<span class="nc" id="L79">		this.conversation.begin();</span>
-<span class="nc" id="L80">		this.conversation.setTimeout(1800000L);</span>
-<span class="nc" id="L81">		return &quot;create?faces-redirect=true&quot;;</span>
-	}
-
-	public void retrieve() {
-
-<span class="nc bnc" id="L86" title="All 2 branches missed.">		if (FacesContext.getCurrentInstance().isPostback()) {</span>
-<span class="nc" id="L87">			return;</span>
-		}
-
-<span class="nc bnc" id="L90" title="All 2 branches missed.">		if (this.conversation.isTransient()) {</span>
-<span class="nc" id="L91">			this.conversation.begin();</span>
-<span class="nc" id="L92">			this.conversation.setTimeout(1800000L);</span>
-		}
-
-<span class="nc bnc" id="L95" title="All 2 branches missed.">		if (this.id == null) {</span>
-<span class="nc" id="L96">			this.category = this.example;</span>
-		}
-		else {
-<span class="nc" id="L99">			this.category = findById(getId());</span>
-		}
-<span class="nc" id="L101">	}</span>
-
-	public Category findById(Long id) {
-
-<span class="nc" id="L105">		return this.entityManager.find(Category.class, id);</span>
-	}
-
-	/*
-	 * Support updating and deleting Category entities
-	 */
-
-	public String update() {
-<span class="nc" id="L113">		this.conversation.end();</span>
-
-		try {
-<span class="nc bnc" id="L116" title="All 2 branches missed.">			if (this.id == null) {</span>
-<span class="nc" id="L117">				this.entityManager.persist(this.category);</span>
-<span class="nc" id="L118">				return &quot;search?faces-redirect=true&quot;;</span>
-			}
-			else {
-<span class="nc" id="L121">				this.entityManager.merge(this.category);</span>
-<span class="nc" id="L122">				return &quot;view?faces-redirect=true&amp;id=&quot; + this.category.getId();</span>
-			}
-		}
-<span class="nc" id="L125">		catch (Exception e) {</span>
-<span class="nc" id="L126">			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));</span>
-<span class="nc" id="L127">			return null;</span>
-		}
-	}
-
-	public String delete() {
-<span class="nc" id="L132">		this.conversation.end();</span>
-
-		try {
-<span class="nc" id="L135">			Category deletableEntity = findById(getId());</span>
-
-<span class="nc" id="L137">			this.entityManager.remove(deletableEntity);</span>
-<span class="nc" id="L138">			this.entityManager.flush();</span>
-<span class="nc" id="L139">			return &quot;search?faces-redirect=true&quot;;</span>
-		}
-<span class="nc" id="L141">		catch (Exception e) {</span>
-<span class="nc" id="L142">			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));</span>
-<span class="nc" id="L143">			return null;</span>
-		}
-	}
-
-	/*
-	 * Support searching Category entities with pagination
-	 */
-
-	private int page;
-
-	private long count;
-
-	private List&lt;Category&gt; pageItems;
-
-<span class="nc" id="L157">	private Category example = new Category();</span>
-
-	public int getPage() {
-<span class="nc" id="L160">		return this.page;</span>
-	}
-
-	public void setPage(int page) {
-<span class="nc" id="L164">		this.page = page;</span>
-<span class="nc" id="L165">	}</span>
-
-	public int getPageSize() {
-<span class="nc" id="L168">		return 10;</span>
-	}
-
-	public Category getExample() {
-<span class="nc" id="L172">		return this.example;</span>
-	}
-
-	public void setExample(Category example) {
-<span class="nc" id="L176">		this.example = example;</span>
-<span class="nc" id="L177">	}</span>
-
-	public String search() {
-<span class="nc" id="L180">		this.page = 0;</span>
-<span class="nc" id="L181">		return null;</span>
-	}
-
-	public void paginate() {
-
-<span class="nc" id="L186">		CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
-
-		// Populate this.count
-
-<span class="nc" id="L190">		CriteriaQuery&lt;Long&gt; countCriteria = builder.createQuery(Long.class);</span>
-<span class="nc" id="L191">		Root&lt;Category&gt; root = countCriteria.from(Category.class);</span>
-<span class="nc" id="L192">		countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root));</span>
-<span class="nc" id="L193">		this.count = this.entityManager.createQuery(countCriteria).getSingleResult();</span>
-
-		// Populate this.pageItems
-
-<span class="nc" id="L197">		CriteriaQuery&lt;Category&gt; criteria = builder.createQuery(Category.class);</span>
-<span class="nc" id="L198">		root = criteria.from(Category.class);</span>
-<span class="nc" id="L199">		TypedQuery&lt;Category&gt; query = this.entityManager</span>
-<span class="nc" id="L200">			.createQuery(criteria.select(root).where(getSearchPredicates(root)));</span>
-<span class="nc" id="L201">		query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());</span>
-<span class="nc" id="L202">		this.pageItems = query.getResultList();</span>
-<span class="nc" id="L203">	}</span>
-
-	private Predicate[] getSearchPredicates(Root&lt;Category&gt; root) {
-
-<span class="nc" id="L207">		CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
-<span class="nc" id="L208">		List&lt;Predicate&gt; predicatesList = new ArrayList&lt;Predicate&gt;();</span>
-
-<span class="nc" id="L210">		String name = this.example.getName();</span>
-<span class="nc bnc" id="L211" title="All 4 branches missed.">		if (name != null &amp;&amp; !&quot;&quot;.equals(name)) {</span>
-<span class="nc" id="L212">			predicatesList.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;name&quot;)), '%' + name.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L214">		String description = this.example.getDescription();</span>
-<span class="nc bnc" id="L215" title="All 4 branches missed.">		if (description != null &amp;&amp; !&quot;&quot;.equals(description)) {</span>
-<span class="nc" id="L216">			predicatesList.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;description&quot;)),</span>
-<span class="nc" id="L217">					'%' + description.toLowerCase() + '%'));</span>
-		}
-
-<span class="nc" id="L220">		return predicatesList.toArray(new Predicate[predicatesList.size()]);</span>
-	}
-
-	public List&lt;Category&gt; getPageItems() {
-<span class="nc" id="L224">		return this.pageItems;</span>
-	}
-
-	public long getCount() {
-<span class="nc" id="L228">		return this.count;</span>
-	}
-
-	/*
-	 * Support listing and POSTing back Category entities (e.g. from inside an
-	 * HtmlSelectOneMenu)
-	 */
-
-	public List&lt;Category&gt; getAll() {
-
-<span class="nc" id="L238">		CriteriaQuery&lt;Category&gt; criteria = this.entityManager.getCriteriaBuilder().createQuery(Category.class);</span>
-<span class="nc" id="L239">		return this.entityManager.createQuery(criteria.select(criteria.from(Category.class))).getResultList();</span>
-	}
-
-	@Resource
-	private SessionContext sessionContext;
-
-	public Converter getConverter() {
-
-<span class="nc" id="L247">		final CategoryBean ejbProxy = this.sessionContext.getBusinessObject(CategoryBean.class);</span>
-
-<span class="nc" id="L249">		return new Converter() {</span>
-
-			@Override
-			public Object getAsObject(FacesContext context, UIComponent component, String value) {
-
-<span class="nc" id="L254">				return ejbProxy.findById(Long.valueOf(value));</span>
-			}
-
-			@Override
-			public String getAsString(FacesContext context, UIComponent component, Object value) {
-
-<span class="nc bnc" id="L260" title="All 2 branches missed.">				if (value == null) {</span>
-<span class="nc" id="L261">					return &quot;&quot;;</span>
-				}
-
-<span class="nc" id="L264">				return String.valueOf(((Category) value).getId());</span>
-			}
-		};
-	}
-
-	/*
-	 * Support adding children to bidirectional, one-to-many tables
-	 */
-
-<span class="nc" id="L273">	private Category add = new Category();</span>
-
-	public Category getAdd() {
-<span class="nc" id="L276">		return this.add;</span>
-	}
-
-	public Category getAdded() {
-<span class="nc" id="L280">		Category added = this.add;</span>
-<span class="nc" id="L281">		this.add = new Category();</span>
-<span class="nc" id="L282">		return added;</span>
-	}
-
+<span class="nc" id="L44">public class CategoryBean implements Serializable</span>
+{
+
+   private static final long serialVersionUID = 1L;
+
+   /*
+    * Support creating and retrieving Category entities
+    */
+
+   private Long id;
+
+   public Long getId()
+   {
+<span class="nc" id="L57">      return this.id;</span>
+   }
+
+   public void setId(Long id)
+   {
+<span class="nc" id="L62">      this.id = id;</span>
+<span class="nc" id="L63">   }</span>
+
+   private Category category;
+
+   public Category getCategory()
+   {
+<span class="nc" id="L69">      return this.category;</span>
+   }
+
+   public void setCategory(Category category)
+   {
+<span class="nc" id="L74">      this.category = category;</span>
+<span class="nc" id="L75">   }</span>
+
+   @Inject
+   private Conversation conversation;
+
+   @PersistenceContext(unitName = &quot;applicationPetstorePU&quot;, type = PersistenceContextType.EXTENDED)
+   private EntityManager entityManager;
+
+   public String create()
+   {
+
+<span class="nc" id="L86">      this.conversation.begin();</span>
+<span class="nc" id="L87">      this.conversation.setTimeout(1800000L);</span>
+<span class="nc" id="L88">      return &quot;create?faces-redirect=true&quot;;</span>
+   }
+
+   public void retrieve()
+   {
+
+<span class="nc bnc" id="L94" title="All 2 branches missed.">      if (FacesContext.getCurrentInstance().isPostback())</span>
+      {
+<span class="nc" id="L96">         return;</span>
+      }
+
+<span class="nc bnc" id="L99" title="All 2 branches missed.">      if (this.conversation.isTransient())</span>
+      {
+<span class="nc" id="L101">         this.conversation.begin();</span>
+<span class="nc" id="L102">         this.conversation.setTimeout(1800000L);</span>
+      }
+
+<span class="nc bnc" id="L105" title="All 2 branches missed.">      if (this.id == null)</span>
+      {
+<span class="nc" id="L107">         this.category = this.example;</span>
+      }
+      else
+      {
+<span class="nc" id="L111">         this.category = findById(getId());</span>
+      }
+<span class="nc" id="L113">   }</span>
+
+   public Category findById(Long id)
+   {
+
+<span class="nc" id="L118">      return this.entityManager.find(Category.class, id);</span>
+   }
+
+   /*
+    * Support updating and deleting Category entities
+    */
+
+   public String update()
+   {
+<span class="nc" id="L127">      this.conversation.end();</span>
+
+      try
+      {
+<span class="nc bnc" id="L131" title="All 2 branches missed.">         if (this.id == null)</span>
+         {
+<span class="nc" id="L133">            this.entityManager.persist(this.category);</span>
+<span class="nc" id="L134">            return &quot;search?faces-redirect=true&quot;;</span>
+         }
+         else
+         {
+<span class="nc" id="L138">            this.entityManager.merge(this.category);</span>
+<span class="nc" id="L139">            return &quot;view?faces-redirect=true&amp;id=&quot; + this.category.getId();</span>
+         }
+      }
+<span class="nc" id="L142">      catch (Exception e)</span>
+      {
+<span class="nc" id="L144">         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));</span>
+<span class="nc" id="L145">         return null;</span>
+      }
+   }
+
+   public String delete()
+   {
+<span class="nc" id="L151">      this.conversation.end();</span>
+
+      try
+      {
+<span class="nc" id="L155">         Category deletableEntity = findById(getId());</span>
+
+<span class="nc" id="L157">         this.entityManager.remove(deletableEntity);</span>
+<span class="nc" id="L158">         this.entityManager.flush();</span>
+<span class="nc" id="L159">         return &quot;search?faces-redirect=true&quot;;</span>
+      }
+<span class="nc" id="L161">      catch (Exception e)</span>
+      {
+<span class="nc" id="L163">         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));</span>
+<span class="nc" id="L164">         return null;</span>
+      }
+   }
+
+   /*
+    * Support searching Category entities with pagination
+    */
+
+   private int page;
+   private long count;
+   private List&lt;Category&gt; pageItems;
+
+<span class="nc" id="L176">   private Category example = new Category();</span>
+
+   public int getPage()
+   {
+<span class="nc" id="L180">      return this.page;</span>
+   }
+
+   public void setPage(int page)
+   {
+<span class="nc" id="L185">      this.page = page;</span>
+<span class="nc" id="L186">   }</span>
+
+   public int getPageSize()
+   {
+<span class="nc" id="L190">      return 10;</span>
+   }
+
+   public Category getExample()
+   {
+<span class="nc" id="L195">      return this.example;</span>
+   }
+
+   public void setExample(Category example)
+   {
+<span class="nc" id="L200">      this.example = example;</span>
+<span class="nc" id="L201">   }</span>
+
+   public String search()
+   {
+<span class="nc" id="L205">      this.page = 0;</span>
+<span class="nc" id="L206">      return null;</span>
+   }
+
+   public void paginate()
+   {
+
+<span class="nc" id="L212">      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
+
+      // Populate this.count
+
+<span class="nc" id="L216">      CriteriaQuery&lt;Long&gt; countCriteria = builder.createQuery(Long.class);</span>
+<span class="nc" id="L217">      Root&lt;Category&gt; root = countCriteria.from(Category.class);</span>
+<span class="nc" id="L218">      countCriteria = countCriteria.select(builder.count(root)).where(</span>
+<span class="nc" id="L219">            getSearchPredicates(root));</span>
+<span class="nc" id="L220">      this.count = this.entityManager.createQuery(countCriteria)</span>
+<span class="nc" id="L221">            .getSingleResult();</span>
+
+      // Populate this.pageItems
+
+<span class="nc" id="L225">      CriteriaQuery&lt;Category&gt; criteria = builder.createQuery(Category.class);</span>
+<span class="nc" id="L226">      root = criteria.from(Category.class);</span>
+<span class="nc" id="L227">      TypedQuery&lt;Category&gt; query = this.entityManager.createQuery(criteria</span>
+<span class="nc" id="L228">            .select(root).where(getSearchPredicates(root)));</span>
+<span class="nc" id="L229">      query.setFirstResult(this.page * getPageSize()).setMaxResults(</span>
+<span class="nc" id="L230">            getPageSize());</span>
+<span class="nc" id="L231">      this.pageItems = query.getResultList();</span>
+<span class="nc" id="L232">   }</span>
+
+   private Predicate[] getSearchPredicates(Root&lt;Category&gt; root)
+   {
+
+<span class="nc" id="L237">      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
+<span class="nc" id="L238">      List&lt;Predicate&gt; predicatesList = new ArrayList&lt;Predicate&gt;();</span>
+
+<span class="nc" id="L240">      String name = this.example.getName();</span>
+<span class="nc bnc" id="L241" title="All 4 branches missed.">      if (name != null &amp;&amp; !&quot;&quot;.equals(name))</span>
+      {
+<span class="nc" id="L243">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;name&quot;)), '%' + name.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L245">      String description = this.example.getDescription();</span>
+<span class="nc bnc" id="L246" title="All 4 branches missed.">      if (description != null &amp;&amp; !&quot;&quot;.equals(description))</span>
+      {
+<span class="nc" id="L248">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;description&quot;)), '%' + description.toLowerCase() + '%'));</span>
+      }
+
+<span class="nc" id="L251">      return predicatesList.toArray(new Predicate[predicatesList.size()]);</span>
+   }
+
+   public List&lt;Category&gt; getPageItems()
+   {
+<span class="nc" id="L256">      return this.pageItems;</span>
+   }
+
+   public long getCount()
+   {
+<span class="nc" id="L261">      return this.count;</span>
+   }
+
+   /*
+    * Support listing and POSTing back Category entities (e.g. from inside an
+    * HtmlSelectOneMenu)
+    */
+
+   public List&lt;Category&gt; getAll()
+   {
+
+<span class="nc" id="L272">      CriteriaQuery&lt;Category&gt; criteria = this.entityManager</span>
+<span class="nc" id="L273">            .getCriteriaBuilder().createQuery(Category.class);</span>
+<span class="nc" id="L274">      return this.entityManager.createQuery(</span>
+<span class="nc" id="L275">            criteria.select(criteria.from(Category.class))).getResultList();</span>
+   }
+
+   @Resource
+   private SessionContext sessionContext;
+
+   public Converter getConverter()
+   {
+
+<span class="nc" id="L284">      final CategoryBean ejbProxy = this.sessionContext.getBusinessObject(CategoryBean.class);</span>
+
+<span class="nc" id="L286">      return new Converter()</span>
+<span class="nc" id="L287">      {</span>
+
+         @Override
+         public Object getAsObject(FacesContext context,
+               UIComponent component, String value)
+         {
+
+<span class="nc" id="L294">            return ejbProxy.findById(Long.valueOf(value));</span>
+         }
+
+         @Override
+         public String getAsString(FacesContext context,
+               UIComponent component, Object value)
+         {
+
+<span class="nc bnc" id="L302" title="All 2 branches missed.">            if (value == null)</span>
+            {
+<span class="nc" id="L304">               return &quot;&quot;;</span>
+            }
+
+<span class="nc" id="L307">            return String.valueOf(((Category) value).getId());</span>
+         }
+      };
+   }
+
+   /*
+    * Support adding children to bidirectional, one-to-many tables
+    */
+
+<span class="nc" id="L316">   private Category add = new Category();</span>
+
+   public Category getAdd()
+   {
+<span class="nc" id="L320">      return this.add;</span>
+   }
+
+   public Category getAdded()
+   {
+<span class="nc" id="L325">      Category added = this.add;</span>
+<span class="nc" id="L326">      this.add = new Category();</span>
+<span class="nc" id="L327">      return added;</span>
+   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

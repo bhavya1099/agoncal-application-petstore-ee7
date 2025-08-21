@@ -16,41 +16,45 @@ import org.agoncal.application.petstore.util.Loggable;
 @Stateless
 @LocalBean
 @Loggable
-public class ProductService extends AbstractService&lt;Product&gt; implements Serializable {
+public class ProductService extends AbstractService&lt;Product&gt; implements Serializable
+{
 
-	// ======================================
-	// = Constructors =
-	// ======================================
+   // ======================================
+   // =            Constructors            =
+   // ======================================
 
-	public ProductService() {
-<span class="nc" id="L26">		super(Product.class);</span>
-<span class="nc" id="L27">	}</span>
+   public ProductService()
+   {
+<span class="nc" id="L28">      super(Product.class);</span>
+<span class="nc" id="L29">   }</span>
 
-	// ======================================
-	// = Protected methods =
-	// ======================================
+   // ======================================
+   // =         Protected methods          =
+   // ======================================
 
-	@Override
-	protected Predicate[] getSearchPredicates(Root&lt;Product&gt; root, Product example) {
-<span class="nc" id="L35">		CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
-<span class="nc" id="L36">		List&lt;Predicate&gt; predicatesList = new ArrayList&lt;Predicate&gt;();</span>
+   @Override
+   protected Predicate[] getSearchPredicates(Root&lt;Product&gt; root, Product example)
+   {
+<span class="nc" id="L38">      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
+<span class="nc" id="L39">      List&lt;Predicate&gt; predicatesList = new ArrayList&lt;Predicate&gt;();</span>
 
-<span class="nc" id="L38">		String name = example.getName();</span>
-<span class="nc bnc" id="L39" title="All 4 branches missed.">		if (name != null &amp;&amp; !&quot;&quot;.equals(name)) {</span>
-<span class="nc" id="L40">			predicatesList.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;name&quot;)), '%' + name.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L42">		String description = example.getDescription();</span>
-<span class="nc bnc" id="L43" title="All 4 branches missed.">		if (description != null &amp;&amp; !&quot;&quot;.equals(description)) {</span>
-<span class="nc" id="L44">			predicatesList.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;description&quot;)),</span>
-<span class="nc" id="L45">					'%' + description.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L47">		Category category = example.getCategory();</span>
-<span class="nc bnc" id="L48" title="All 2 branches missed.">		if (category != null) {</span>
-<span class="nc" id="L49">			predicatesList.add(builder.equal(root.get(&quot;category&quot;), category));</span>
-		}
+<span class="nc" id="L41">      String name = example.getName();</span>
+<span class="nc bnc" id="L42" title="All 4 branches missed.">      if (name != null &amp;&amp; !&quot;&quot;.equals(name))</span>
+      {
+<span class="nc" id="L44">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;name&quot;)), '%' + name.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L46">      String description = example.getDescription();</span>
+<span class="nc bnc" id="L47" title="All 4 branches missed.">      if (description != null &amp;&amp; !&quot;&quot;.equals(description))</span>
+      {
+<span class="nc" id="L49">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;description&quot;)), '%' + description.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L51">      Category category = example.getCategory();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">      if (category != null)</span>
+      {
+<span class="nc" id="L54">         predicatesList.add(builder.equal(root.get(&quot;category&quot;), category));</span>
+      }
 
-<span class="nc" id="L52">		return predicatesList.toArray(new Predicate[predicatesList.size()]);</span>
-	}
-
+<span class="nc" id="L57">      return predicatesList.toArray(new Predicate[predicatesList.size()]);</span>
+   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

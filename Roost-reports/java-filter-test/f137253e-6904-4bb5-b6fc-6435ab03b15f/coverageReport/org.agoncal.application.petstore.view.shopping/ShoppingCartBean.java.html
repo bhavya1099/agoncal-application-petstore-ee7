@@ -18,152 +18,150 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Antonio Goncalves http://www.antoniogoncalves.org --
+ * @author Antonio Goncalves
+ *         http://www.antoniogoncalves.org
+ *         --
  */
 
 @Named
 @ConversationScoped
 @Loggable
 @CatchException
-<span class="nc" id="L28">public class ShoppingCartBean extends AbstractBean implements Serializable {</span>
+<span class="nc" id="L30">public class ShoppingCartBean extends AbstractBean implements Serializable {</span>
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+    // ======================================
+    // =             Attributes             =
+    // ======================================
 
-	@Inject
-	@LoggedIn
-	private Instance&lt;Customer&gt; loggedInCustomer;
+    @Inject
+    @LoggedIn
+    private Instance&lt;Customer&gt; loggedInCustomer;
+    @Inject
+    private CatalogService catalogBean;
+    @Inject
+    private PurchaseOrderService orderBean;
+    @Inject
+    private Conversation conversation;
 
-	@Inject
-	private CatalogService catalogBean;
+    private List&lt;ShoppingCartItem&gt; cartItems;
+<span class="nc" id="L47">    private CreditCard creditCard = new CreditCard();</span>
+    private PurchaseOrder order;
 
-	@Inject
-	private PurchaseOrderService orderBean;
+    // ======================================
+    // =              Public Methods        =
+    // ======================================
 
-	@Inject
-	private Conversation conversation;
+    public String addItemToCart() {
+<span class="nc" id="L55">        Item item = catalogBean.findItem(getParamId(&quot;itemId&quot;));</span>
 
-	private List&lt;ShoppingCartItem&gt; cartItems;
+        // Start conversation
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (conversation.isTransient()) {</span>
+<span class="nc" id="L59">            cartItems = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L60">            conversation.begin();</span>
+        }
 
-<span class="nc" id="L49">	private CreditCard creditCard = new CreditCard();</span>
+<span class="nc" id="L63">        boolean itemFound = false;</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        for (ShoppingCartItem cartItem : cartItems) {</span>
+            // If item already exists in the shopping cart we just change the quantity
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            if (cartItem.getItem().equals(item)) {</span>
+<span class="nc" id="L67">                cartItem.setQuantity(cartItem.getQuantity() + 1);</span>
+<span class="nc" id="L68">                itemFound = true;</span>
+            }
+<span class="nc" id="L70">        }</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (!itemFound)</span>
+            // Otherwise it's added to the shopping cart
+<span class="nc" id="L73">            cartItems.add(new ShoppingCartItem(item, 1));</span>
 
-	private PurchaseOrder order;
+<span class="nc" id="L75">        return &quot;showcart.faces&quot;;</span>
+    }
 
-	// ======================================
-	// = Public Methods =
-	// ======================================
+    public String removeItemFromCart() {
+<span class="nc" id="L79">        Item item = catalogBean.findItem(getParamId(&quot;itemId&quot;));</span>
 
-	public String addItemToCart() {
-<span class="nc" id="L58">		Item item = catalogBean.findItem(getParamId(&quot;itemId&quot;));</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        for (ShoppingCartItem cartItem : cartItems) {</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            if (cartItem.getItem().equals(item)) {</span>
+<span class="nc" id="L83">                cartItems.remove(cartItem);</span>
+<span class="nc" id="L84">                return null;</span>
+            }
+<span class="nc" id="L86">        }</span>
 
-		// Start conversation
-<span class="nc bnc" id="L61" title="All 2 branches missed.">		if (conversation.isTransient()) {</span>
-<span class="nc" id="L62">			cartItems = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L63">			conversation.begin();</span>
-		}
+<span class="nc" id="L88">        return null;</span>
+    }
 
-<span class="nc" id="L66">		boolean itemFound = false;</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">		for (ShoppingCartItem cartItem : cartItems) {</span>
-			// If item already exists in the shopping cart we just change the quantity
-<span class="nc bnc" id="L69" title="All 2 branches missed.">			if (cartItem.getItem().equals(item)) {</span>
-<span class="nc" id="L70">				cartItem.setQuantity(cartItem.getQuantity() + 1);</span>
-<span class="nc" id="L71">				itemFound = true;</span>
-			}
-<span class="nc" id="L73">		}</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">		if (!itemFound)</span>
-			// Otherwise it's added to the shopping cart
-<span class="nc" id="L76">			cartItems.add(new ShoppingCartItem(item, 1));</span>
+    public String updateQuantity() {
+<span class="nc" id="L92">        return null;</span>
+    }
 
-<span class="nc" id="L78">		return &quot;showcart.faces&quot;;</span>
-	}
+    public String checkout() {
+<span class="nc" id="L96">        return &quot;confirmorder.faces&quot;;</span>
+    }
 
-	public String removeItemFromCart() {
-<span class="nc" id="L82">		Item item = catalogBean.findItem(getParamId(&quot;itemId&quot;));</span>
+    public String confirmOrder() {
+<span class="nc" id="L100">        order = orderBean.createOrder(getCustomer(), creditCard, getCartItems());</span>
+<span class="nc" id="L101">        cartItems.clear();</span>
 
-<span class="nc bnc" id="L84" title="All 2 branches missed.">		for (ShoppingCartItem cartItem : cartItems) {</span>
-<span class="nc bnc" id="L85" title="All 2 branches missed.">			if (cartItem.getItem().equals(item)) {</span>
-<span class="nc" id="L86">				cartItems.remove(cartItem);</span>
-<span class="nc" id="L87">				return null;</span>
-			}
-<span class="nc" id="L89">		}</span>
+        // Stop conversation
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if (!conversation.isTransient()) {</span>
+<span class="nc" id="L105">            conversation.end();</span>
+        }
 
-<span class="nc" id="L91">		return null;</span>
-	}
+<span class="nc" id="L108">        return &quot;orderconfirmed.faces&quot;;</span>
+    }
 
-	public String updateQuantity() {
-<span class="nc" id="L95">		return null;</span>
-	}
+    public List&lt;ShoppingCartItem&gt; getCartItems() {
+<span class="nc" id="L112">        return cartItems;</span>
+    }
 
-	public String checkout() {
-<span class="nc" id="L99">		return &quot;confirmorder.faces&quot;;</span>
-	}
+    public boolean shoppingCartIsEmpty() {
+<span class="nc bnc" id="L116" title="All 4 branches missed.">        return getCartItems() == null || getCartItems().size() == 0;</span>
+    }
 
-	public String confirmOrder() {
-<span class="nc" id="L103">		order = orderBean.createOrder(getCustomer(), creditCard, getCartItems());</span>
-<span class="nc" id="L104">		cartItems.clear();</span>
 
-		// Stop conversation
-<span class="nc bnc" id="L107" title="All 2 branches missed.">		if (!conversation.isTransient()) {</span>
-<span class="nc" id="L108">			conversation.end();</span>
-		}
+    public Float getTotal() {
 
-<span class="nc" id="L111">		return &quot;orderconfirmed.faces&quot;;</span>
-	}
+<span class="nc bnc" id="L122" title="All 4 branches missed.">        if (cartItems == null || cartItems.isEmpty())</span>
+<span class="nc" id="L123">            return 0f;</span>
 
-	public List&lt;ShoppingCartItem&gt; getCartItems() {
-<span class="nc" id="L115">		return cartItems;</span>
-	}
+<span class="nc" id="L125">        Float total = 0f;</span>
 
-	public boolean shoppingCartIsEmpty() {
-<span class="nc bnc" id="L119" title="All 4 branches missed.">		return getCartItems() == null || getCartItems().size() == 0;</span>
-	}
+        // Sum up the quantities
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        for (ShoppingCartItem cartItem : cartItems) {</span>
+<span class="nc" id="L129">            total += (cartItem.getSubTotal());</span>
+<span class="nc" id="L130">        }</span>
+<span class="nc" id="L131">        return total;</span>
+    }
 
-	public Float getTotal() {
+    // ======================================
+    // =         Getters &amp; setters          =
+    // ======================================
 
-<span class="nc bnc" id="L124" title="All 4 branches missed.">		if (cartItems == null || cartItems.isEmpty())</span>
-<span class="nc" id="L125">			return 0f;</span>
+    public Customer getCustomer() {
+<span class="nc" id="L139">        return loggedInCustomer.get();</span>
+    }
 
-<span class="nc" id="L127">		Float total = 0f;</span>
 
-		// Sum up the quantities
-<span class="nc bnc" id="L130" title="All 2 branches missed.">		for (ShoppingCartItem cartItem : cartItems) {</span>
-<span class="nc" id="L131">			total += (cartItem.getSubTotal());</span>
-<span class="nc" id="L132">		}</span>
-<span class="nc" id="L133">		return total;</span>
-	}
+    public CreditCard getCreditCard() {
+<span class="nc" id="L144">        return creditCard;</span>
+    }
 
-	// ======================================
-	// = Getters &amp; setters =
-	// ======================================
+    public void setCreditCard(CreditCard creditCard) {
+<span class="nc" id="L148">        this.creditCard = creditCard;</span>
+<span class="nc" id="L149">    }</span>
 
-	public Customer getCustomer() {
-<span class="nc" id="L141">		return loggedInCustomer.get();</span>
-	}
+    public PurchaseOrder getOrder() {
+<span class="nc" id="L152">        return order;</span>
+    }
 
-	public CreditCard getCreditCard() {
-<span class="nc" id="L145">		return creditCard;</span>
-	}
+    public void setOrder(PurchaseOrder order) {
+<span class="nc" id="L156">        this.order = order;</span>
+<span class="nc" id="L157">    }</span>
 
-	public void setCreditCard(CreditCard creditCard) {
-<span class="nc" id="L149">		this.creditCard = creditCard;</span>
-<span class="nc" id="L150">	}</span>
+    public Conversation getConversation() {
+<span class="nc" id="L160">        return conversation;</span>
+    }
 
-	public PurchaseOrder getOrder() {
-<span class="nc" id="L153">		return order;</span>
-	}
-
-	public void setOrder(PurchaseOrder order) {
-<span class="nc" id="L157">		this.order = order;</span>
-<span class="nc" id="L158">	}</span>
-
-	public Conversation getConversation() {
-<span class="nc" id="L161">		return conversation;</span>
-	}
-
-	public CreditCardType[] getCreditCardTypes() {
-<span class="nc" id="L165">		return CreditCardType.values();</span>
-	}
-
+    public CreditCardType[] getCreditCardTypes() {
+<span class="nc" id="L164">        return CreditCardType.values();</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

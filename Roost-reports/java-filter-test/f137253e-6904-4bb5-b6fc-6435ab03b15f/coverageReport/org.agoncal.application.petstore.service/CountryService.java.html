@@ -15,51 +15,55 @@ import org.agoncal.application.petstore.util.Loggable;
 @Stateless
 @LocalBean
 @Loggable
-public class CountryService extends AbstractService&lt;Country&gt; implements Serializable {
+public class CountryService extends AbstractService&lt;Country&gt; implements Serializable
+{
 
-	// ======================================
-	// = Constructors =
-	// ======================================
+   // ======================================
+   // =            Constructors            =
+   // ======================================
 
-	public CountryService() {
-<span class="nc" id="L25">		super(Country.class);</span>
-<span class="nc" id="L26">	}</span>
+   public CountryService()
+   {
+<span class="nc" id="L27">      super(Country.class);</span>
+<span class="nc" id="L28">   }</span>
 
-	// ======================================
-	// = Protected methods =
-	// ======================================
+   // ======================================
+   // =         Protected methods          =
+   // ======================================
 
-	@Override
-	protected Predicate[] getSearchPredicates(Root&lt;Country&gt; root, Country example) {
-<span class="nc" id="L34">		CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
-<span class="nc" id="L35">		List&lt;Predicate&gt; predicatesList = new ArrayList&lt;Predicate&gt;();</span>
+   @Override
+   protected Predicate[] getSearchPredicates(Root&lt;Country&gt; root, Country example)
+   {
+<span class="nc" id="L37">      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
+<span class="nc" id="L38">      List&lt;Predicate&gt; predicatesList = new ArrayList&lt;Predicate&gt;();</span>
 
-<span class="nc" id="L37">		String isoCode = example.getIsoCode();</span>
-<span class="nc bnc" id="L38" title="All 4 branches missed.">		if (isoCode != null &amp;&amp; !&quot;&quot;.equals(isoCode)) {</span>
-<span class="nc" id="L39">			predicatesList</span>
-<span class="nc" id="L40">				.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;isoCode&quot;)), '%' + isoCode.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L42">		String name = example.getName();</span>
-<span class="nc bnc" id="L43" title="All 4 branches missed.">		if (name != null &amp;&amp; !&quot;&quot;.equals(name)) {</span>
-<span class="nc" id="L44">			predicatesList.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;name&quot;)), '%' + name.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L46">		String printableName = example.getPrintableName();</span>
-<span class="nc bnc" id="L47" title="All 4 branches missed.">		if (printableName != null &amp;&amp; !&quot;&quot;.equals(printableName)) {</span>
-<span class="nc" id="L48">			predicatesList.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;printableName&quot;)),</span>
-<span class="nc" id="L49">					'%' + printableName.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L51">		String iso3 = example.getIso3();</span>
-<span class="nc bnc" id="L52" title="All 4 branches missed.">		if (iso3 != null &amp;&amp; !&quot;&quot;.equals(iso3)) {</span>
-<span class="nc" id="L53">			predicatesList.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;iso3&quot;)), '%' + iso3.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L55">		String numcode = example.getNumcode();</span>
-<span class="nc bnc" id="L56" title="All 4 branches missed.">		if (numcode != null &amp;&amp; !&quot;&quot;.equals(numcode)) {</span>
-<span class="nc" id="L57">			predicatesList</span>
-<span class="nc" id="L58">				.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;numcode&quot;)), '%' + numcode.toLowerCase() + '%'));</span>
-		}
+<span class="nc" id="L40">      String isoCode = example.getIsoCode();</span>
+<span class="nc bnc" id="L41" title="All 4 branches missed.">      if (isoCode != null &amp;&amp; !&quot;&quot;.equals(isoCode))</span>
+      {
+<span class="nc" id="L43">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;isoCode&quot;)), '%' + isoCode.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L45">      String name = example.getName();</span>
+<span class="nc bnc" id="L46" title="All 4 branches missed.">      if (name != null &amp;&amp; !&quot;&quot;.equals(name))</span>
+      {
+<span class="nc" id="L48">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;name&quot;)), '%' + name.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L50">      String printableName = example.getPrintableName();</span>
+<span class="nc bnc" id="L51" title="All 4 branches missed.">      if (printableName != null &amp;&amp; !&quot;&quot;.equals(printableName))</span>
+      {
+<span class="nc" id="L53">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;printableName&quot;)), '%' + printableName.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L55">      String iso3 = example.getIso3();</span>
+<span class="nc bnc" id="L56" title="All 4 branches missed.">      if (iso3 != null &amp;&amp; !&quot;&quot;.equals(iso3))</span>
+      {
+<span class="nc" id="L58">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;iso3&quot;)), '%' + iso3.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L60">      String numcode = example.getNumcode();</span>
+<span class="nc bnc" id="L61" title="All 4 branches missed.">      if (numcode != null &amp;&amp; !&quot;&quot;.equals(numcode))</span>
+      {
+<span class="nc" id="L63">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;numcode&quot;)), '%' + numcode.toLowerCase() + '%'));</span>
+      }
 
-<span class="nc" id="L61">		return predicatesList.toArray(new Predicate[predicatesList.size()]);</span>
-	}
-
+<span class="nc" id="L66">      return predicatesList.toArray(new Predicate[predicatesList.size()]);</span>
+   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

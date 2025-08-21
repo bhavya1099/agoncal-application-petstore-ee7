@@ -13,40 +13,47 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import java.io.IOException;
 
 /**
- * @author blep Date: 12/02/12 Time: 12:29
+ * @author blep
+ *         Date: 12/02/12
+ *         Time: 12:29
  */
 
 @Named
-<span class="nc" id="L20">public class SimpleCallbackHandler implements CallbackHandler {</span>
+<span class="nc" id="L22">public class SimpleCallbackHandler implements CallbackHandler</span>
+{
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+   // ======================================
+   // =             Attributes             =
+   // ======================================
 
-	@Inject
-	// @RequestScoped
-	private CredentialsBean credentials;
+   @Inject
+   //@RequestScoped
+   private CredentialsBean credentials;
 
-	// ======================================
-	// = Business methods =
-	// ======================================
+   // ======================================
+   // =          Business methods          =
+   // ======================================
 
-	@Override
-	public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-<span class="nc bnc" id="L36" title="All 2 branches missed.">		for (Callback callback : callbacks) {</span>
-<span class="nc bnc" id="L37" title="All 2 branches missed.">			if (callback instanceof NameCallback) {</span>
-<span class="nc" id="L38">				NameCallback nameCallback = (NameCallback) callback;</span>
-<span class="nc" id="L39">				nameCallback.setName(credentials.getLogin());</span>
-<span class="nc" id="L40">			}</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">			else if (callback instanceof PasswordCallback) {</span>
-<span class="nc" id="L42">				PasswordCallback passwordCallback = (PasswordCallback) callback;</span>
-<span class="nc" id="L43">				passwordCallback.setPassword(credentials.getPassword().toCharArray());</span>
-<span class="nc" id="L44">			}</span>
-			else {
-<span class="nc" id="L46">				throw new UnsupportedCallbackException(callback);</span>
-			}
-		}
-<span class="nc" id="L49">	}</span>
-
+   @Override
+   public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
+   {
+<span class="nc bnc" id="L40" title="All 2 branches missed.">      for (Callback callback : callbacks)</span>
+      {
+<span class="nc bnc" id="L42" title="All 2 branches missed.">         if (callback instanceof NameCallback)</span>
+         {
+<span class="nc" id="L44">            NameCallback nameCallback = (NameCallback) callback;</span>
+<span class="nc" id="L45">            nameCallback.setName(credentials.getLogin());</span>
+<span class="nc" id="L46">         }</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">         else if (callback instanceof PasswordCallback)</span>
+         {
+<span class="nc" id="L49">            PasswordCallback passwordCallback = (PasswordCallback) callback;</span>
+<span class="nc" id="L50">            passwordCallback.setPassword(credentials.getPassword().toCharArray());</span>
+<span class="nc" id="L51">         }</span>
+         else
+         {
+<span class="nc" id="L54">            throw new UnsupportedCallbackException(callback);</span>
+         }
+      }
+<span class="nc" id="L57">   }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

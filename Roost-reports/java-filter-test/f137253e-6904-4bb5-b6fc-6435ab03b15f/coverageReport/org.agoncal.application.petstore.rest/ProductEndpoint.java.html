@@ -14,100 +14,110 @@ import javax.ws.rs.core.UriBuilder;
 import java.util.List;
 
 /**
- * @author Antonio Goncalves http://www.antoniogoncalves.org --
+ * @author Antonio Goncalves
+ *         http://www.antoniogoncalves.org
+ *         --
  */
 
 @Stateless
 @Path(&quot;/products&quot;)
 @Loggable
 @Api(&quot;Product&quot;)
-<span class="nc" id="L24">public class ProductEndpoint {</span>
+<span class="nc" id="L26">public class ProductEndpoint</span>
+{
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+   // ======================================
+   // =             Attributes             =
+   // ======================================
 
-	@PersistenceContext(unitName = &quot;applicationPetstorePU&quot;)
-	private EntityManager em;
+   @PersistenceContext(unitName = &quot;applicationPetstorePU&quot;)
+   private EntityManager em;
 
-	// ======================================
-	// = Business methods =
-	// ======================================
+   // ======================================
+   // =          Business methods          =
+   // ======================================
 
-	@POST
-	@Consumes({ &quot;application/xml&quot;, &quot;application/json&quot; })
-	@ApiOperation(&quot;Creates new product&quot;)
-	public Response create(Product entity) {
-<span class="nc" id="L41">		em.persist(entity);</span>
-<span class="nc" id="L42">		return Response</span>
-<span class="nc" id="L43">			.created(UriBuilder.fromResource(ProductEndpoint.class).path(String.valueOf(entity.getId())).build())</span>
-<span class="nc" id="L44">			.build();</span>
-	}
+   @POST
+   @Consumes( {&quot;application/xml&quot;, &quot;application/json&quot;})
+   @ApiOperation(&quot;Creates new product&quot;)
+   public Response create(Product entity)
+   {
+<span class="nc" id="L45">      em.persist(entity);</span>
+<span class="nc" id="L46">      return Response.created(UriBuilder.fromResource(ProductEndpoint.class).path(String.valueOf(entity.getId())).build()).build();</span>
+   }
 
-	@DELETE
-	@Path(&quot;/{id:[0-9][0-9]*}&quot;)
-	@ApiOperation(&quot;Deletes a product by id&quot;)
-	public Response deleteById(@PathParam(&quot;id&quot;) Long id) {
-<span class="nc" id="L51">		Product entity = em.find(Product.class, id);</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">		if (entity == null) {</span>
-<span class="nc" id="L53">			return Response.status(Status.NOT_FOUND).build();</span>
-		}
-<span class="nc" id="L55">		em.remove(entity);</span>
-<span class="nc" id="L56">		return Response.noContent().build();</span>
-	}
+   @DELETE
+   @Path(&quot;/{id:[0-9][0-9]*}&quot;)
+   @ApiOperation(&quot;Deletes a product by id&quot;)
+   public Response deleteById(@PathParam(&quot;id&quot;) Long id)
+   {
+<span class="nc" id="L54">      Product entity = em.find(Product.class, id);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">      if (entity == null)</span>
+      {
+<span class="nc" id="L57">         return Response.status(Status.NOT_FOUND).build();</span>
+      }
+<span class="nc" id="L59">      em.remove(entity);</span>
+<span class="nc" id="L60">      return Response.noContent().build();</span>
+   }
 
-	@GET
-	@Path(&quot;/{id:[0-9][0-9]*}&quot;)
-	@Produces({ &quot;application/xml&quot;, &quot;application/json&quot; })
-	@ApiOperation(&quot;Finds a product by id&quot;)
-	public Response findById(@PathParam(&quot;id&quot;) Long id) {
-<span class="nc" id="L64">		TypedQuery&lt;Product&gt; findByIdQuery = em.createQuery(</span>
-				&quot;SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.category WHERE p.id = :entityId ORDER BY p.id&quot;,
-				Product.class);
-<span class="nc" id="L67">		findByIdQuery.setParameter(&quot;entityId&quot;, id);</span>
-		Product entity;
-		try {
-<span class="nc" id="L70">			entity = findByIdQuery.getSingleResult();</span>
-		}
-<span class="nc" id="L72">		catch (NoResultException nre) {</span>
-<span class="nc" id="L73">			entity = null;</span>
-<span class="nc" id="L74">		}</span>
-<span class="nc bnc" id="L75" title="All 2 branches missed.">		if (entity == null) {</span>
-<span class="nc" id="L76">			return Response.status(Status.NOT_FOUND).build();</span>
-		}
-<span class="nc" id="L78">		return Response.ok(entity).build();</span>
-	}
+   @GET
+   @Path(&quot;/{id:[0-9][0-9]*}&quot;)
+   @Produces( {&quot;application/xml&quot;, &quot;application/json&quot;})
+   @ApiOperation(&quot;Finds a product by id&quot;)
+   public Response findById(@PathParam(&quot;id&quot;) Long id)
+   {
+<span class="nc" id="L69">      TypedQuery&lt;Product&gt; findByIdQuery = em.createQuery(&quot;SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.category WHERE p.id = :entityId ORDER BY p.id&quot;, Product.class);</span>
+<span class="nc" id="L70">      findByIdQuery.setParameter(&quot;entityId&quot;, id);</span>
+      Product entity;
+      try
+      {
+<span class="nc" id="L74">         entity = findByIdQuery.getSingleResult();</span>
+      }
+<span class="nc" id="L76">      catch (NoResultException nre)</span>
+      {
+<span class="nc" id="L78">         entity = null;</span>
+<span class="nc" id="L79">      }</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">      if (entity == null)</span>
+      {
+<span class="nc" id="L82">         return Response.status(Status.NOT_FOUND).build();</span>
+      }
+<span class="nc" id="L84">      return Response.ok(entity).build();</span>
+   }
 
-	@GET
-	@Produces({ &quot;application/xml&quot;, &quot;application/json&quot; })
-	@ApiOperation(&quot;Lists all products&quot;)
-	public List&lt;Product&gt; listAll(@QueryParam(&quot;start&quot;) Integer startPosition, @QueryParam(&quot;max&quot;) Integer maxResult) {
-<span class="nc" id="L85">		TypedQuery&lt;Product&gt; findAllQuery = em</span>
-<span class="nc" id="L86">			.createQuery(&quot;SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.category ORDER BY p.id&quot;, Product.class);</span>
-<span class="nc bnc" id="L87" title="All 2 branches missed.">		if (startPosition != null) {</span>
-<span class="nc" id="L88">			findAllQuery.setFirstResult(startPosition);</span>
-		}
-<span class="nc bnc" id="L90" title="All 2 branches missed.">		if (maxResult != null) {</span>
-<span class="nc" id="L91">			findAllQuery.setMaxResults(maxResult);</span>
-		}
-<span class="nc" id="L93">		final List&lt;Product&gt; results = findAllQuery.getResultList();</span>
-<span class="nc" id="L94">		return results;</span>
-	}
+   @GET
+   @Produces( {&quot;application/xml&quot;, &quot;application/json&quot;})
+   @ApiOperation(&quot;Lists all products&quot;)
+   public List&lt;Product&gt; listAll(@QueryParam(&quot;start&quot;) Integer startPosition, @QueryParam(&quot;max&quot;) Integer maxResult)
+   {
+<span class="nc" id="L92">      TypedQuery&lt;Product&gt; findAllQuery = em.createQuery(&quot;SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.category ORDER BY p.id&quot;, Product.class);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">      if (startPosition != null)</span>
+      {
+<span class="nc" id="L95">         findAllQuery.setFirstResult(startPosition);</span>
+      }
+<span class="nc bnc" id="L97" title="All 2 branches missed.">      if (maxResult != null)</span>
+      {
+<span class="nc" id="L99">         findAllQuery.setMaxResults(maxResult);</span>
+      }
+<span class="nc" id="L101">      final List&lt;Product&gt; results = findAllQuery.getResultList();</span>
+<span class="nc" id="L102">      return results;</span>
+   }
 
-	@PUT
-	@Path(&quot;/{id:[0-9][0-9]*}&quot;)
-	@Consumes({ &quot;application/xml&quot;, &quot;application/json&quot; })
-	@ApiOperation(&quot;Updates a product&quot;)
-	public Response update(Product entity) {
-		try {
-<span class="nc" id="L103">			entity = em.merge(entity);</span>
-		}
-<span class="nc" id="L105">		catch (OptimisticLockException e) {</span>
-<span class="nc" id="L106">			return Response.status(Response.Status.CONFLICT).entity(e.getEntity()).build();</span>
-<span class="nc" id="L107">		}</span>
+   @PUT
+   @Path(&quot;/{id:[0-9][0-9]*}&quot;)
+   @Consumes( {&quot;application/xml&quot;, &quot;application/json&quot;})
+   @ApiOperation(&quot;Updates a product&quot;)
+   public Response update(Product entity)
+   {
+      try
+      {
+<span class="nc" id="L113">         entity = em.merge(entity);</span>
+      }
+<span class="nc" id="L115">      catch (OptimisticLockException e)</span>
+      {
+<span class="nc" id="L117">         return Response.status(Response.Status.CONFLICT).entity(e.getEntity()).build();</span>
+<span class="nc" id="L118">      }</span>
 
-<span class="nc" id="L109">		return Response.noContent().build();</span>
-	}
-
+<span class="nc" id="L120">      return Response.noContent().build();</span>
+   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

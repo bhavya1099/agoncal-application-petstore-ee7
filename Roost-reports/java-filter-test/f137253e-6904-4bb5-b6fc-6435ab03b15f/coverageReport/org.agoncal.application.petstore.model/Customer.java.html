@@ -18,288 +18,319 @@ import java.util.*;
  */
 
 @Entity
-@NamedQueries({ @NamedQuery(name = Customer.FIND_BY_LOGIN, query = &quot;SELECT c FROM Customer c WHERE c.login = :login&quot;),
-		@NamedQuery(name = Customer.FIND_BY_EMAIL, query = &quot;SELECT c FROM Customer c WHERE c.email = :email&quot;),
-		@NamedQuery(name = Customer.FIND_BY_LOGIN_PASSWORD,
-				query = &quot;SELECT c FROM Customer c WHERE c.login = :login AND c.password = :password&quot;),
-		@NamedQuery(name = Customer.FIND_BY_UUID, query = &quot;SELECT c FROM Customer c WHERE c.uuid = :uuid&quot;),
-		@NamedQuery(name = Customer.FIND_ALL, query = &quot;SELECT c FROM Customer c&quot;) })
+@NamedQueries({
+         @NamedQuery(name = Customer.FIND_BY_LOGIN, query = &quot;SELECT c FROM Customer c WHERE c.login = :login&quot;),
+         @NamedQuery(name = Customer.FIND_BY_EMAIL, query = &quot;SELECT c FROM Customer c WHERE c.email = :email&quot;),
+         @NamedQuery(name = Customer.FIND_BY_LOGIN_PASSWORD, query = &quot;SELECT c FROM Customer c WHERE c.login = :login AND c.password = :password&quot;),
+         @NamedQuery(name = Customer.FIND_BY_UUID, query = &quot;SELECT c FROM Customer c WHERE c.uuid = :uuid&quot;),
+         @NamedQuery(name = Customer.FIND_ALL, query = &quot;SELECT c FROM Customer c&quot;)
+})
 @XmlRootElement
-public class Customer implements Serializable {
+public class Customer implements Serializable
+{
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+   // ======================================
+   // = Attributes =
+   // ======================================
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = &quot;id&quot;, updatable = false, nullable = false)
-	private Long id;
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO)
+   @Column(name = &quot;id&quot;, updatable = false, nullable = false)
+   private Long id;
+   @Version
+   @Column(name = &quot;version&quot;)
+   private int version;
 
-	@Version
-	@Column(name = &quot;version&quot;)
-	private int version;
+   @Column(length = 50, name = &quot;first_name&quot;, nullable = false)
+   @NotNull
+   @Size(min = 2, max = 50)
+   private String firstName;
 
-	@Column(length = 50, name = &quot;first_name&quot;, nullable = false)
-	@NotNull
-	@Size(min = 2, max = 50)
-	private String firstName;
+   @Column(length = 50, name = &quot;last_name&quot;, nullable = false)
+   @NotNull
+   @Size(min = 2, max = 50)
+   private String lastName;
 
-	@Column(length = 50, name = &quot;last_name&quot;, nullable = false)
-	@NotNull
-	@Size(min = 2, max = 50)
-	private String lastName;
+   @Column
+   private String telephone;
 
-	@Column
-	private String telephone;
+   @Column
+   @Email
+   private String email;
 
-	@Column
-	@Email
-	private String email;
+   @Column(length = 10, nullable = false)
+   @Login
+   private String login;
 
-	@Column(length = 10, nullable = false)
-	@Login
-	private String login;
+   @Column(length = 256, nullable = false)
+   @NotNull
+   @Size(min = 1, max = 256)
+   private String password;
 
-	@Column(length = 256, nullable = false)
-	@NotNull
-	@Size(min = 1, max = 256)
-	private String password;
+   @Column(length = 256)
+   @Size(min = 1, max = 256)
+   private String uuid;
 
-	@Column(length = 256)
-	@Size(min = 1, max = 256)
-	private String uuid;
+   private UserRole role;
 
-	private UserRole role;
+   @Column(name = &quot;date_of_birth&quot;)
+   @Temporal(TemporalType.DATE)
+   @Past
+   private Date dateOfBirth;
 
-	@Column(name = &quot;date_of_birth&quot;)
-	@Temporal(TemporalType.DATE)
-	@Past
-	private Date dateOfBirth;
+   @Transient
+   private Integer age;
 
-	@Transient
-	private Integer age;
+<span class="fc" id="L84">   @Embedded</span>
+   @Valid
+   private Address homeAddress = new Address();
 
-<span class="fc" id="L83">	@Embedded</span>
-	@Valid
-	private Address homeAddress = new Address();
+   // ======================================
+   // = Constants =
+   // ======================================
 
-	// ======================================
-	// = Constants =
-	// ======================================
+   public static final String FIND_BY_LOGIN = &quot;Customer.findByLogin&quot;;
+   public static final String FIND_BY_LOGIN_PASSWORD = &quot;Customer.findByLoginAndPassword&quot;;
+   public static final String FIND_ALL = &quot;Customer.findAll&quot;;
+   public static final String FIND_BY_EMAIL = &quot;Customer.findByEmail&quot;;
+   public static final String FIND_BY_UUID = &quot;Customer.findByUUID&quot;;
 
-	public static final String FIND_BY_LOGIN = &quot;Customer.findByLogin&quot;;
+   // ======================================
+   // = Constructors =
+   // ======================================
 
-	public static final String FIND_BY_LOGIN_PASSWORD = &quot;Customer.findByLoginAndPassword&quot;;
+   public Customer()
+<span class="fc" id="L103">   {</span>
+<span class="fc" id="L104">   }</span>
 
-	public static final String FIND_ALL = &quot;Customer.findAll&quot;;
+   public Customer(String firstName, String lastName, String login, String plainTextPassword, String email,
+            Address address)
+<span class="fc" id="L108">   {</span>
+<span class="fc" id="L109">      this.firstName = firstName;</span>
+<span class="fc" id="L110">      this.lastName = lastName;</span>
+<span class="fc" id="L111">      this.login = login;</span>
+<span class="fc" id="L112">      this.password = digestPassword(plainTextPassword);</span>
+<span class="fc" id="L113">      this.email = email;</span>
+<span class="fc" id="L114">      this.homeAddress = address;</span>
+<span class="fc" id="L115">      this.dateOfBirth = new Date();</span>
+<span class="fc" id="L116">   }</span>
 
-	public static final String FIND_BY_EMAIL = &quot;Customer.findByEmail&quot;;
+   // ======================================
+   // = Lifecycle Methods =
+   // ======================================
 
-	public static final String FIND_BY_UUID = &quot;Customer.findByUUID&quot;;
+   /**
+    * This method calculates the age of the customer
+    */
+   @PostLoad
+   @PostPersist
+   @PostUpdate
+   public void calculateAge()
+   {
+<span class="fc bfc" id="L130" title="All 2 branches covered.">      if (dateOfBirth == null)</span>
+      {
+<span class="fc" id="L132">         age = null;</span>
+<span class="fc" id="L133">         return;</span>
+      }
 
-	// ======================================
-	// = Constructors =
-	// ======================================
+<span class="fc" id="L136">      Calendar birth = new GregorianCalendar();</span>
+<span class="fc" id="L137">      birth.setTime(dateOfBirth);</span>
+<span class="fc" id="L138">      Calendar now = new GregorianCalendar();</span>
+<span class="fc" id="L139">      now.setTime(new Date());</span>
+<span class="fc" id="L140">      int adjust = 0;</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">      if (now.get(Calendar.DAY_OF_YEAR) - birth.get(Calendar.DAY_OF_YEAR) &lt; 0)</span>
+      {
+<span class="nc" id="L143">         adjust = -1;</span>
+      }
+<span class="fc" id="L145">      age = now.get(Calendar.YEAR) - birth.get(Calendar.YEAR) + adjust;</span>
+<span class="fc" id="L146">   }</span>
 
-<span class="fc" id="L105">	public Customer() {</span>
-<span class="fc" id="L106">	}</span>
+   @PrePersist
+   private void digestPassword()
+   {
+<span class="nc" id="L151">      password = digestPassword(password);</span>
+<span class="nc" id="L152">   }</span>
 
-	public Customer(String firstName, String lastName, String login, String plainTextPassword, String email,
-<span class="fc" id="L109">			Address address) {</span>
-<span class="fc" id="L110">		this.firstName = firstName;</span>
-<span class="fc" id="L111">		this.lastName = lastName;</span>
-<span class="fc" id="L112">		this.login = login;</span>
-<span class="fc" id="L113">		this.password = digestPassword(plainTextPassword);</span>
-<span class="fc" id="L114">		this.email = email;</span>
-<span class="fc" id="L115">		this.homeAddress = address;</span>
-<span class="fc" id="L116">		this.dateOfBirth = new Date();</span>
-<span class="fc" id="L117">	}</span>
+   // ======================================
+   // = Business methods =
+   // ======================================
 
-	// ======================================
-	// = Lifecycle Methods =
-	// ======================================
+   /**
+    * Digest password with &lt;code&gt;SHA-256&lt;/code&gt; then encode it with Base64.
+    *
+    * @param plainTextPassword the password to digest and encode
+    * @return digested password
+    */
+   public String digestPassword(String plainTextPassword)
+   {
+      try
+      {
+<span class="fc" id="L168">         MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);</span>
+<span class="fc" id="L169">         md.update(plainTextPassword.getBytes(&quot;UTF-8&quot;));</span>
+<span class="fc" id="L170">         byte[] passwordDigest = md.digest();</span>
+<span class="fc" id="L171">         return Base64.getEncoder().encodeToString(passwordDigest);</span>
+      }
+<span class="fc" id="L173">      catch (Exception e)</span>
+      {
+<span class="fc" id="L175">         throw new RuntimeException(&quot;Exception encoding password&quot;, e);</span>
+      }
+   }
 
-	/**
-	 * This method calculates the age of the customer
-	 */
-	@PostLoad
-	@PostPersist
-	@PostUpdate
-	public void calculateAge() {
-<span class="nc bnc" id="L130" title="All 2 branches missed.">		if (dateOfBirth == null) {</span>
-<span class="nc" id="L131">			age = null;</span>
-<span class="nc" id="L132">			return;</span>
-		}
+   // ======================================
+   // = Getters &amp; setters =
+   // ======================================
 
-<span class="nc" id="L135">		Calendar birth = new GregorianCalendar();</span>
-<span class="nc" id="L136">		birth.setTime(dateOfBirth);</span>
-<span class="nc" id="L137">		Calendar now = new GregorianCalendar();</span>
-<span class="nc" id="L138">		now.setTime(new Date());</span>
-<span class="nc" id="L139">		int adjust = 0;</span>
-<span class="nc bnc" id="L140" title="All 2 branches missed.">		if (now.get(Calendar.DAY_OF_YEAR) - birth.get(Calendar.DAY_OF_YEAR) &lt; 0) {</span>
-<span class="nc" id="L141">			adjust = -1;</span>
-		}
-<span class="nc" id="L143">		age = now.get(Calendar.YEAR) - birth.get(Calendar.YEAR) + adjust;</span>
-<span class="nc" id="L144">	}</span>
+   public Long getId()
+   {
+<span class="nc" id="L185">      return this.id;</span>
+   }
 
-	@PrePersist
-	private void digestPassword() {
-<span class="nc" id="L148">		password = digestPassword(password);</span>
-<span class="nc" id="L149">	}</span>
+   public void setId(final Long id)
+   {
+<span class="nc" id="L190">      this.id = id;</span>
+<span class="nc" id="L191">   }</span>
 
-	// ======================================
-	// = Business methods =
-	// ======================================
+   public int getVersion()
+   {
+<span class="nc" id="L195">      return this.version;</span>
+   }
 
-	/**
-	 * Digest password with &lt;code&gt;SHA-256&lt;/code&gt; then encode it with Base64.
-	 * @param plainTextPassword the password to digest and encode
-	 * @return digested password
-	 */
-	public String digestPassword(String plainTextPassword) {
-		try {
-<span class="fc" id="L162">			MessageDigest md = MessageDigest.getInstance(&quot;SHA-256&quot;);</span>
-<span class="fc" id="L163">			md.update(plainTextPassword.getBytes(&quot;UTF-8&quot;));</span>
-<span class="fc" id="L164">			byte[] passwordDigest = md.digest();</span>
-<span class="fc" id="L165">			return Base64.getEncoder().encodeToString(passwordDigest);</span>
-		}
-<span class="fc" id="L167">		catch (Exception e) {</span>
-<span class="fc" id="L168">			throw new RuntimeException(&quot;Exception encoding password&quot;, e);</span>
-		}
-	}
+   public void setVersion(final int version)
+   {
+<span class="nc" id="L200">      this.version = version;</span>
+<span class="nc" id="L201">   }</span>
 
-	// ======================================
-	// = Getters &amp; setters =
-	// ======================================
+   public String getLogin()
+   {
+<span class="nc" id="L205">      return login;</span>
+   }
 
-	public Long getId() {
-<span class="nc" id="L177">		return this.id;</span>
-	}
+   public void setLogin(String login)
+   {
+<span class="nc" id="L210">      this.login = login;</span>
+<span class="nc" id="L211">   }</span>
 
-	public void setId(final Long id) {
-<span class="nc" id="L181">		this.id = id;</span>
-<span class="nc" id="L182">	}</span>
+   public UserRole getRole()
+   {
+<span class="nc" id="L215">      return role;</span>
+   }
 
-	public int getVersion() {
-<span class="nc" id="L185">		return this.version;</span>
-	}
+   public void setRole(UserRole role)
+   {
+<span class="nc" id="L220">      this.role = role;</span>
+<span class="nc" id="L221">   }</span>
 
-	public void setVersion(final int version) {
-<span class="nc" id="L189">		this.version = version;</span>
-<span class="nc" id="L190">	}</span>
+   public String getUuid()
+   {
+<span class="nc" id="L225">      return uuid;</span>
+   }
 
-	public String getLogin() {
-<span class="nc" id="L193">		return login;</span>
-	}
+   public void setUuid(String uuid)
+   {
+<span class="nc" id="L230">      this.uuid = uuid;</span>
+<span class="nc" id="L231">   }</span>
 
-	public void setLogin(String login) {
-<span class="nc" id="L197">		this.login = login;</span>
-<span class="nc" id="L198">	}</span>
+   public String getPassword()
+   {
+<span class="nc" id="L235">      return password;</span>
+   }
 
-	public UserRole getRole() {
-<span class="nc" id="L201">		return role;</span>
-	}
+   public void setPassword(String password)
+   {
+<span class="nc" id="L240">      this.password = password;</span>
+<span class="nc" id="L241">   }</span>
 
-	public void setRole(UserRole role) {
-<span class="nc" id="L205">		this.role = role;</span>
-<span class="nc" id="L206">	}</span>
+   public String getFirstName()
+   {
+<span class="nc" id="L245">      return firstName;</span>
+   }
 
-	public String getUuid() {
-<span class="nc" id="L209">		return uuid;</span>
-	}
+   public void setFirstName(String firstName)
+   {
+<span class="nc" id="L250">      this.firstName = firstName;</span>
+<span class="nc" id="L251">   }</span>
 
-	public void setUuid(String uuid) {
-<span class="nc" id="L213">		this.uuid = uuid;</span>
-<span class="nc" id="L214">	}</span>
+   public String getLastName()
+   {
+<span class="nc" id="L255">      return lastName;</span>
+   }
 
-	public String getPassword() {
-<span class="nc" id="L217">		return password;</span>
-	}
+   public void setLastName(String lastName)
+   {
+<span class="nc" id="L260">      this.lastName = lastName;</span>
+<span class="nc" id="L261">   }</span>
 
-	public void setPassword(String password) {
-<span class="nc" id="L221">		this.password = password;</span>
-<span class="nc" id="L222">	}</span>
+   public String getFullName()
+   {
+<span class="nc" id="L265">      return firstName + &quot; &quot; + lastName;</span>
+   }
 
-	public String getFirstName() {
-<span class="nc" id="L225">		return firstName;</span>
-	}
+   public String getTelephone()
+   {
+<span class="nc" id="L270">      return telephone;</span>
+   }
 
-	public void setFirstName(String firstName) {
-<span class="nc" id="L229">		this.firstName = firstName;</span>
-<span class="nc" id="L230">	}</span>
+   public void setTelephone(String telephone)
+   {
+<span class="nc" id="L275">      this.telephone = telephone;</span>
+<span class="nc" id="L276">   }</span>
 
-	public String getLastName() {
-<span class="nc" id="L233">		return lastName;</span>
-	}
+   public String getEmail()
+   {
+<span class="nc" id="L280">      return email;</span>
+   }
 
-	public void setLastName(String lastName) {
-<span class="nc" id="L237">		this.lastName = lastName;</span>
-<span class="nc" id="L238">	}</span>
+   public void setEmail(String email)
+   {
+<span class="nc" id="L285">      this.email = email;</span>
+<span class="nc" id="L286">   }</span>
 
-	public String getFullName() {
-<span class="nc" id="L241">		return firstName + &quot; &quot; + lastName;</span>
-	}
+   public Date getDateOfBirth()
+   {
+<span class="nc" id="L290">      return dateOfBirth;</span>
+   }
 
-	public String getTelephone() {
-<span class="nc" id="L245">		return telephone;</span>
-	}
+   public void setDateOfBirth(Date dateOfBirth)
+   {
+<span class="fc" id="L295">      this.dateOfBirth = dateOfBirth;</span>
+<span class="fc" id="L296">   }</span>
 
-	public void setTelephone(String telephone) {
-<span class="nc" id="L249">		this.telephone = telephone;</span>
-<span class="nc" id="L250">	}</span>
+   public Integer getAge()
+   {
+<span class="fc" id="L300">      return age;</span>
+   }
 
-	public String getEmail() {
-<span class="nc" id="L253">		return email;</span>
-	}
+   public Address getHomeAddress()
+   {
+<span class="nc" id="L305">      return homeAddress;</span>
+   }
 
-	public void setEmail(String email) {
-<span class="nc" id="L257">		this.email = email;</span>
-<span class="nc" id="L258">	}</span>
+   public void setHomeAddress(Address homeAddress)
+   {
+<span class="nc" id="L310">      this.homeAddress = homeAddress;</span>
+<span class="nc" id="L311">   }</span>
 
-	public Date getDateOfBirth() {
-<span class="nc" id="L261">		return dateOfBirth;</span>
-	}
+   // ======================================
+   // = Methods hash, equals, toString =
+   // ======================================
 
-	public void setDateOfBirth(Date dateOfBirth) {
-<span class="nc" id="L265">		this.dateOfBirth = dateOfBirth;</span>
-<span class="nc" id="L266">	}</span>
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="fc bfc" id="L320" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L321">        Customer customer = (Customer) o;</span>
+<span class="fc" id="L322">        return login.equals(customer.login);</span>
+    }
 
-	public Integer getAge() {
-<span class="nc" id="L269">		return age;</span>
-	}
+    @Override
+    public int hashCode() {
+<span class="nc" id="L327">        return Objects.hash(login);</span>
+    }
 
-	public Address getHomeAddress() {
-<span class="nc" id="L273">		return homeAddress;</span>
-	}
-
-	public void setHomeAddress(Address homeAddress) {
-<span class="nc" id="L277">		this.homeAddress = homeAddress;</span>
-<span class="nc" id="L278">	}</span>
-
-	// ======================================
-	// = Methods hash, equals, toString =
-	// ======================================
-
-	@Override
-	public boolean equals(Object o) {
-<span class="fc bfc" id="L286" title="All 2 branches covered.">		if (this == o)</span>
-<span class="fc" id="L287">			return true;</span>
-<span class="fc bfc" id="L288" title="All 4 branches covered.">		if (o == null || getClass() != o.getClass())</span>
-<span class="fc" id="L289">			return false;</span>
-<span class="fc" id="L290">		Customer customer = (Customer) o;</span>
-<span class="fc" id="L291">		return login.equals(customer.login);</span>
-	}
-
-	@Override
-	public int hashCode() {
-<span class="nc" id="L296">		return Objects.hash(login);</span>
-	}
-
-	@Override
-	public String toString() {
-<span class="fc" id="L301">		return firstName + ' ' + lastName + &quot; (&quot; + login + &quot;)&quot;;</span>
-	}
-
+    @Override
+   public String toString()
+   {
+<span class="fc" id="L333">      return firstName + ' ' + lastName + &quot; (&quot; + login + &quot;)&quot;;</span>
+   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

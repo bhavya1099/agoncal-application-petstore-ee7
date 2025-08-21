@@ -7,108 +7,122 @@ import java.util.Objects;
 
 @Entity
 @Table(name = &quot;order_line&quot;)
-public class OrderLine implements Serializable {
+public class OrderLine implements Serializable
+{
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+   // ======================================
+   // = Attributes =
+   // ======================================
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = &quot;id&quot;, updatable = false, nullable = false)
-	private Long id;
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO)
+   @Column(name = &quot;id&quot;, updatable = false, nullable = false)
+   private Long id;
+   @Version
+   @Column(name = &quot;version&quot;)
+   private int version;
 
-	@Version
-	@Column(name = &quot;version&quot;)
-	private int version;
+   @Column(nullable = false)
+   @Min(1)
+   private Integer quantity;
 
-	@Column(nullable = false)
-	@Min(1)
-	private Integer quantity;
+   @ManyToOne(cascade = CascadeType.PERSIST)
+   @JoinColumn(name = &quot;item_fk&quot;, nullable = false)
+   private Item item;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = &quot;item_fk&quot;, nullable = false)
-	private Item item;
+   // ======================================
+   // = Constructors =
+   // ======================================
 
-	// ======================================
-	// = Constructors =
-	// ======================================
+   public OrderLine()
+<span class="fc" id="L38">   {</span>
+<span class="fc" id="L39">   }</span>
 
-<span class="fc" id="L37">	public OrderLine() {</span>
-<span class="fc" id="L38">	}</span>
+   public OrderLine(Integer quantity, Item item)
+<span class="fc" id="L42">   {</span>
+<span class="fc" id="L43">      this.quantity = quantity;</span>
+<span class="fc" id="L44">      this.item = item;</span>
+<span class="fc" id="L45">   }</span>
 
-<span class="fc" id="L40">	public OrderLine(Integer quantity, Item item) {</span>
-<span class="fc" id="L41">		this.quantity = quantity;</span>
-<span class="fc" id="L42">		this.item = item;</span>
-<span class="fc" id="L43">	}</span>
+   // ======================================
+   // = Business methods =
+   // ======================================
 
-	// ======================================
-	// = Business methods =
-	// ======================================
+   public Float getSubTotal()
+   {
+<span class="nc" id="L53">      return item.getUnitCost() * quantity;</span>
+   }
 
-	public Float getSubTotal() {
-<span class="nc" id="L50">		return item.getUnitCost() * quantity;</span>
-	}
+   // ======================================
+   // = Getters &amp; setters =
+   // ======================================
 
-	// ======================================
-	// = Getters &amp; setters =
-	// ======================================
+   public Long getId()
+   {
+<span class="nc" id="L62">      return this.id;</span>
+   }
 
-	public Long getId() {
-<span class="nc" id="L58">		return this.id;</span>
-	}
+   public void setId(final Long id)
+   {
+<span class="nc" id="L67">      this.id = id;</span>
+<span class="nc" id="L68">   }</span>
 
-	public void setId(final Long id) {
-<span class="nc" id="L62">		this.id = id;</span>
-<span class="nc" id="L63">	}</span>
+   public int getVersion()
+   {
+<span class="nc" id="L72">      return this.version;</span>
+   }
 
-	public int getVersion() {
-<span class="nc" id="L66">		return this.version;</span>
-	}
+   public void setVersion(final int version)
+   {
+<span class="nc" id="L77">      this.version = version;</span>
+<span class="nc" id="L78">   }</span>
 
-	public void setVersion(final int version) {
-<span class="nc" id="L70">		this.version = version;</span>
-<span class="nc" id="L71">	}</span>
+   public Integer getQuantity()
+   {
+<span class="nc" id="L82">      return quantity;</span>
+   }
 
-	public Integer getQuantity() {
-<span class="nc" id="L74">		return quantity;</span>
-	}
+   public void setQuantity(Integer quantity)
+   {
+<span class="fc" id="L87">      this.quantity = quantity;</span>
+<span class="fc" id="L88">   }</span>
 
-	public void setQuantity(Integer quantity) {
-<span class="fc" id="L78">		this.quantity = quantity;</span>
-<span class="fc" id="L79">	}</span>
+   public Item getItem()
+   {
+<span class="nc" id="L92">      return this.item;</span>
+   }
 
-	public Item getItem() {
-<span class="nc" id="L82">		return this.item;</span>
-	}
+   public void setItem(final Item item)
+   {
+<span class="nc" id="L97">      this.item = item;</span>
+<span class="nc" id="L98">   }</span>
 
-	public void setItem(final Item item) {
-<span class="nc" id="L86">		this.item = item;</span>
-<span class="nc" id="L87">	}</span>
+   // ======================================
+   // = Methods hash, equals, toString =
+   // ======================================
 
-	// ======================================
-	// = Methods hash, equals, toString =
-	// ======================================
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="fc bfc" id="L107" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L108">        OrderLine orderLine = (OrderLine) o;</span>
+<span class="pc bpc" id="L109" title="1 of 4 branches missed.">        return quantity.equals(orderLine.quantity) &amp;&amp; item.equals(orderLine.item);</span>
+    }
 
-	@Override
-	public boolean equals(Object o) {
-<span class="fc bfc" id="L95" title="All 2 branches covered.">		if (this == o)</span>
-<span class="fc" id="L96">			return true;</span>
-<span class="fc bfc" id="L97" title="All 4 branches covered.">		if (o == null || getClass() != o.getClass())</span>
-<span class="fc" id="L98">			return false;</span>
-<span class="fc" id="L99">		OrderLine orderLine = (OrderLine) o;</span>
-<span class="pc bpc" id="L100" title="1 of 4 branches missed.">		return quantity.equals(orderLine.quantity) &amp;&amp; item.equals(orderLine.item);</span>
-	}
+    @Override
+    public int hashCode() {
+<span class="fc" id="L114">        return Objects.hash(quantity, item);</span>
+    }
 
-	@Override
-	public int hashCode() {
-<span class="fc" id="L105">		return Objects.hash(quantity, item);</span>
-	}
-
-	@Override
-	public String toString() {
-<span class="fc" id="L110">		return &quot;OrderLine{&quot; + &quot;id=&quot; + id + &quot;, version=&quot; + version + &quot;, quantity=&quot; + quantity + &quot;, item=&quot; + item + '}';</span>
-	}
-
+    @Override
+   public String toString()
+   {
+<span class="fc" id="L120">      return &quot;OrderLine{&quot; +</span>
+               &quot;id=&quot; + id +
+               &quot;, version=&quot; + version +
+               &quot;, quantity=&quot; + quantity +
+               &quot;, item=&quot; + item +
+               '}';
+   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

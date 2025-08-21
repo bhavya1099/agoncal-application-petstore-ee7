@@ -5,19 +5,20 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import java.util.logging.Logger;
 
 /**
- * @author Antonio Goncalves http://www.antoniogoncalves.org --
+ * @author Antonio Goncalves
+ *         http://www.antoniogoncalves.org
+ *         --
  */
 
-<span class="nc" id="L11">public class LoggingProducer {</span>
+<span class="nc" id="L13">public class LoggingProducer {</span>
 
-	// ======================================
-	// = Business methods =
-	// ======================================
+    // ======================================
+    // =          Business methods          =
+    // ======================================
 
-	@Produces
-	public Logger produceLogger(InjectionPoint injectionPoint) {
-<span class="nc" id="L19">		return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());</span>
-	}
-
+    @Produces
+    public Logger produceLogger(InjectionPoint injectionPoint) {
+<span class="nc" id="L21">        return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -6,38 +6,38 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * @author blep Date: 16/02/12 Time: 20:56
+ * @author blep
+ *         Date: 16/02/12
+ *         Time: 20:56
  */
 
-<span class="nc" id="L12">public class ConfigPropertyProducer {</span>
+<span class="nc" id="L14">public class ConfigPropertyProducer {</span>
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+    // ======================================
+    // =             Attributes             =
+    // ======================================
 
-	private static Properties props;
+    private static Properties props;
 
-	static {
-<span class="nc" id="L21">		props = new Properties();</span>
-		try {
-<span class="nc" id="L23">			props.load(ConfigPropertyProducer.class.getResourceAsStream(&quot;/config.properties&quot;));</span>
-		}
-<span class="nc" id="L25">		catch (IOException e) {</span>
-<span class="nc" id="L26">			e.printStackTrace();</span>
-<span class="nc" id="L27">		}</span>
-<span class="nc" id="L28">	}</span>
+    static {
+<span class="nc" id="L23">        props = new Properties();</span>
+        try {
+<span class="nc" id="L25">            props.load(ConfigPropertyProducer.class.getResourceAsStream(&quot;/config.properties&quot;));</span>
+<span class="nc" id="L26">        } catch (IOException e) {</span>
+<span class="nc" id="L27">            e.printStackTrace();</span>
+<span class="nc" id="L28">        }</span>
+<span class="nc" id="L29">    }</span>
 
-	// ======================================
-	// = Business methods =
-	// ======================================
+    // ======================================
+    // =          Business methods          =
+    // ======================================
 
-	@Produces
-	@ConfigProperty
-	public static String produceConfigProperty(InjectionPoint ip) {
-<span class="nc" id="L37">		String key = ip.getAnnotated().getAnnotation(ConfigProperty.class).value();</span>
+    @Produces
+    @ConfigProperty
+    public static String produceConfigProperty(InjectionPoint ip) {
+<span class="nc" id="L38">        String key = ip.getAnnotated().getAnnotation(ConfigProperty.class).value();</span>
 
-<span class="nc" id="L39">		return props.getProperty(key);</span>
-	}
-
+<span class="nc" id="L40">        return props.getProperty(key);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

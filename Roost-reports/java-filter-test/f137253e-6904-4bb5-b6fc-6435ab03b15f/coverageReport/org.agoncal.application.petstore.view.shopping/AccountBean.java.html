@@ -17,114 +17,114 @@ import javax.security.auth.login.LoginException;
 import java.io.Serializable;
 
 /**
- * @author Antonio Goncalves http://www.antoniogoncalves.org --
+ * @author Antonio Goncalves
+ *         http://www.antoniogoncalves.org
+ *         --
  */
 
 @Named
 @SessionScoped
 @Loggable
 @CatchException
-<span class="nc" id="L27">public class AccountBean extends AbstractBean implements Serializable {</span>
+<span class="nc" id="L29">public class AccountBean extends AbstractBean implements Serializable {</span>
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+    // ======================================
+    // =             Attributes             =
+    // ======================================
 
-	@Inject
-	private CustomerService customerService;
+    @Inject
+    private CustomerService customerService;
 
-	@Inject
-	private CredentialsBean credentials;
+    @Inject
+    private CredentialsBean credentials;
 
-	@Inject
-	private Conversation conversation;
+    @Inject
+    private Conversation conversation;
 
-	@Produces
-	@LoggedIn
-	private Customer loggedinCustomer;
+    @Produces
+    @LoggedIn
+    private Customer loggedinCustomer;
 
-	@Inject
-	@SessionScoped
-	private transient LoginContext loginContext;
+    @Inject
+    @SessionScoped
+    private transient LoginContext loginContext;
 
-	// ======================================
-	// = Public Methods =
-	// ======================================
+    // ======================================
+    // =              Public Methods        =
+    // ======================================
 
-	public String doLogin() throws LoginException {
-<span class="nc bnc" id="L55" title="All 4 branches missed.">		if (credentials.getLogin() == null || &quot;&quot;.equals(credentials.getLogin())) {</span>
-<span class="nc" id="L56">			addWarningMessage(&quot;id_filled&quot;);</span>
-<span class="nc" id="L57">			return null;</span>
-		}
-<span class="nc bnc" id="L59" title="All 4 branches missed.">		if (credentials.getPassword() == null || &quot;&quot;.equals(credentials.getPassword())) {</span>
-<span class="nc" id="L60">			addWarningMessage(&quot;pwd_filled&quot;);</span>
-<span class="nc" id="L61">			return null;</span>
-		}
+    public String doLogin() throws LoginException {
+<span class="nc bnc" id="L57" title="All 4 branches missed.">        if (credentials.getLogin() == null || &quot;&quot;.equals(credentials.getLogin())) {</span>
+<span class="nc" id="L58">            addWarningMessage(&quot;id_filled&quot;);</span>
+<span class="nc" id="L59">            return null;</span>
+        }
+<span class="nc bnc" id="L61" title="All 4 branches missed.">        if (credentials.getPassword() == null || &quot;&quot;.equals(credentials.getPassword())) {</span>
+<span class="nc" id="L62">            addWarningMessage(&quot;pwd_filled&quot;);</span>
+<span class="nc" id="L63">            return null;</span>
+        }
 
-		// TODO loginContext.login();
-<span class="nc" id="L65">		loggedinCustomer = customerService.findCustomer(credentials.getLogin());</span>
-<span class="nc" id="L66">		return &quot;main.faces&quot;;</span>
-	}
+// TODO       loginContext.login();
+<span class="nc" id="L67">        loggedinCustomer = customerService.findCustomer(credentials.getLogin());</span>
+<span class="nc" id="L68">        return &quot;main.faces&quot;;</span>
+    }
 
-	public String doCreateNewAccount() {
+    public String doCreateNewAccount() {
 
-		// Login has to be unique
-<span class="nc bnc" id="L72" title="All 2 branches missed.">		if (customerService.doesLoginAlreadyExist(credentials.getLogin())) {</span>
-<span class="nc" id="L73">			addWarningMessage(&quot;login_exists&quot;);</span>
-<span class="nc" id="L74">			return null;</span>
-		}
+        // Login has to be unique
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (customerService.doesLoginAlreadyExist(credentials.getLogin())) {</span>
+<span class="nc" id="L75">            addWarningMessage(&quot;login_exists&quot;);</span>
+<span class="nc" id="L76">            return null;</span>
+        }
 
-		// Id and password must be filled
-<span class="nc bnc" id="L78" title="All 4 branches missed.">		if (&quot;&quot;.equals(credentials.getLogin()) || &quot;&quot;.equals(credentials.getPassword())</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">				|| &quot;&quot;.equals(credentials.getPassword2())) {</span>
-<span class="nc" id="L80">			addWarningMessage(&quot;id_pwd_filled&quot;);</span>
-<span class="nc" id="L81">			return null;</span>
-		}
-<span class="nc bnc" id="L83" title="All 2 branches missed.">		else if (!credentials.getPassword().equals(credentials.getPassword2())) {</span>
-<span class="nc" id="L84">			addWarningMessage(&quot;both_pwd_same&quot;);</span>
-<span class="nc" id="L85">			return null;</span>
-		}
+        // Id and password must be filled
+<span class="nc bnc" id="L80" title="All 6 branches missed.">        if (&quot;&quot;.equals(credentials.getLogin()) || &quot;&quot;.equals(credentials.getPassword()) || &quot;&quot;.equals(credentials.getPassword2())) {</span>
+<span class="nc" id="L81">            addWarningMessage(&quot;id_pwd_filled&quot;);</span>
+<span class="nc" id="L82">            return null;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        } else if (!credentials.getPassword().equals(credentials.getPassword2())) {</span>
+<span class="nc" id="L84">            addWarningMessage(&quot;both_pwd_same&quot;);</span>
+<span class="nc" id="L85">            return null;</span>
+        }
 
-		// Login and password are ok
-<span class="nc" id="L89">		loggedinCustomer = new Customer();</span>
-<span class="nc" id="L90">		loggedinCustomer.setLogin(credentials.getLogin());</span>
-<span class="nc" id="L91">		loggedinCustomer.setPassword(credentials.getPassword());</span>
+        // Login and password are ok
+<span class="nc" id="L89">        loggedinCustomer = new Customer();</span>
+<span class="nc" id="L90">        loggedinCustomer.setLogin(credentials.getLogin());</span>
+<span class="nc" id="L91">        loggedinCustomer.setPassword(credentials.getPassword());</span>
 
-<span class="nc" id="L93">		return &quot;createaccount.faces&quot;;</span>
-	}
+<span class="nc" id="L93">        return &quot;createaccount.faces&quot;;</span>
+    }
 
-	public String doCreateCustomer() {
-<span class="nc" id="L97">		loggedinCustomer = customerService.createCustomer(loggedinCustomer);</span>
-<span class="nc" id="L98">		return &quot;main.faces&quot;;</span>
-	}
+    public String doCreateCustomer() {
+<span class="nc" id="L97">        loggedinCustomer = customerService.createCustomer(loggedinCustomer);</span>
+<span class="nc" id="L98">        return &quot;main.faces&quot;;</span>
+    }
 
-	public String doLogout() {
-<span class="nc" id="L102">		loggedinCustomer = null;</span>
-		// Stop conversation
-<span class="nc bnc" id="L104" title="All 2 branches missed.">		if (!conversation.isTransient()) {</span>
-<span class="nc" id="L105">			conversation.end();</span>
-		}
-<span class="nc" id="L107">		addInformationMessage(&quot;been_loggedout&quot;);</span>
-<span class="nc" id="L108">		return &quot;main.faces&quot;;</span>
-	}
 
-	public String doUpdateAccount() {
-<span class="nc" id="L112">		loggedinCustomer = customerService.updateCustomer(loggedinCustomer);</span>
-<span class="nc" id="L113">		addInformationMessage(&quot;account_updated&quot;);</span>
-<span class="nc" id="L114">		return &quot;showaccount.faces&quot;;</span>
-	}
+    public String doLogout() {
+<span class="nc" id="L103">        loggedinCustomer = null;</span>
+        // Stop conversation
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (!conversation.isTransient()) {</span>
+<span class="nc" id="L106">            conversation.end();</span>
+        }
+<span class="nc" id="L108">        addInformationMessage(&quot;been_loggedout&quot;);</span>
+<span class="nc" id="L109">        return &quot;main.faces&quot;;</span>
+    }
 
-	public boolean isLoggedIn() {
-<span class="nc bnc" id="L118" title="All 2 branches missed.">		return loggedinCustomer != null;</span>
-	}
+    public String doUpdateAccount() {
+<span class="nc" id="L113">        loggedinCustomer = customerService.updateCustomer(loggedinCustomer);</span>
+<span class="nc" id="L114">        addInformationMessage(&quot;account_updated&quot;);</span>
+<span class="nc" id="L115">        return &quot;showaccount.faces&quot;;</span>
+    }
 
-	public Customer getLoggedinCustomer() {
-<span class="nc" id="L122">		return loggedinCustomer;</span>
-	}
+    public boolean isLoggedIn() {
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        return loggedinCustomer != null;</span>
+    }
 
-	public void setLoggedinCustomer(Customer loggedinCustomer) {
-<span class="nc" id="L126">		this.loggedinCustomer = loggedinCustomer;</span>
-<span class="nc" id="L127">	}</span>
+    public Customer getLoggedinCustomer() {
+<span class="nc" id="L123">        return loggedinCustomer;</span>
+    }
 
+    public void setLoggedinCustomer(Customer loggedinCustomer) {
+<span class="nc" id="L127">        this.loggedinCustomer = loggedinCustomer;</span>
+<span class="nc" id="L128">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

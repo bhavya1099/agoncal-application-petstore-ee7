@@ -5,17 +5,16 @@ import org.agoncal.application.petstore.util.Vat;
 import javax.inject.Named;
 import org.agoncal.application.petstore.util.Discount;
 
-<span class="nc" id="L8">public class NumberProducer {</span>
+<span class="nc" id="L8">public class NumberProducer</span>
+{
 
-	@Produces
-	@Vat
-	@Named
-	private Float vatRate;
-
-	@Produces
-	@Discount
-	@Named
-	private Float discountRate;
-
+   @Produces
+   @Vat
+   @Named
+   private Float vatRate;
+   @Produces
+   @Discount
+   @Named
+   private Float discountRate;
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

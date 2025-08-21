@@ -16,46 +16,51 @@ import org.agoncal.application.petstore.util.Loggable;
 @Stateless
 @LocalBean
 @Loggable
-public class ItemService extends AbstractService&lt;Item&gt; implements Serializable {
+public class ItemService extends AbstractService&lt;Item&gt; implements Serializable
+{
 
-	// ======================================
-	// = Constructors =
-	// ======================================
 
-	public ItemService() {
-<span class="nc" id="L26">		super(Item.class);</span>
-<span class="nc" id="L27">	}</span>
+   // ======================================
+   // =            Constructors            =
+   // ======================================
 
-	// ======================================
-	// = Protected methods =
-	// ======================================
+   public ItemService()
+   {
+<span class="nc" id="L29">      super(Item.class);</span>
+<span class="nc" id="L30">   }</span>
 
-	@Override
-	protected Predicate[] getSearchPredicates(Root&lt;Item&gt; root, Item example) {
-<span class="nc" id="L35">		CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
-<span class="nc" id="L36">		List&lt;Predicate&gt; predicatesList = new ArrayList&lt;Predicate&gt;();</span>
+   // ======================================
+   // =         Protected methods          =
+   // ======================================
 
-<span class="nc" id="L38">		String name = example.getName();</span>
-<span class="nc bnc" id="L39" title="All 4 branches missed.">		if (name != null &amp;&amp; !&quot;&quot;.equals(name)) {</span>
-<span class="nc" id="L40">			predicatesList.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;name&quot;)), '%' + name.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L42">		String description = example.getDescription();</span>
-<span class="nc bnc" id="L43" title="All 4 branches missed.">		if (description != null &amp;&amp; !&quot;&quot;.equals(description)) {</span>
-<span class="nc" id="L44">			predicatesList.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;description&quot;)),</span>
-<span class="nc" id="L45">					'%' + description.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L47">		String imagePath = example.getImagePath();</span>
-<span class="nc bnc" id="L48" title="All 4 branches missed.">		if (imagePath != null &amp;&amp; !&quot;&quot;.equals(imagePath)) {</span>
-<span class="nc" id="L49">			predicatesList</span>
-<span class="nc" id="L50">				.add(builder.like(builder.lower(root.&lt;String&gt;get(&quot;imagePath&quot;)), '%' + imagePath.toLowerCase() + '%'));</span>
-		}
-<span class="nc" id="L52">		Product product = example.getProduct();</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">		if (product != null) {</span>
-<span class="nc" id="L54">			predicatesList.add(builder.equal(root.get(&quot;product&quot;), product));</span>
-		}
+   @Override
+   protected Predicate[] getSearchPredicates(Root&lt;Item&gt; root, Item example)
+   {
+<span class="nc" id="L39">      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();</span>
+<span class="nc" id="L40">      List&lt;Predicate&gt; predicatesList = new ArrayList&lt;Predicate&gt;();</span>
 
-<span class="nc" id="L57">		return predicatesList.toArray(new Predicate[predicatesList.size()]);</span>
-	}
+<span class="nc" id="L42">      String name = example.getName();</span>
+<span class="nc bnc" id="L43" title="All 4 branches missed.">      if (name != null &amp;&amp; !&quot;&quot;.equals(name))</span>
+      {
+<span class="nc" id="L45">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;name&quot;)), '%' + name.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L47">      String description = example.getDescription();</span>
+<span class="nc bnc" id="L48" title="All 4 branches missed.">      if (description != null &amp;&amp; !&quot;&quot;.equals(description))</span>
+      {
+<span class="nc" id="L50">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;description&quot;)), '%' + description.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L52">      String imagePath = example.getImagePath();</span>
+<span class="nc bnc" id="L53" title="All 4 branches missed.">      if (imagePath != null &amp;&amp; !&quot;&quot;.equals(imagePath))</span>
+      {
+<span class="nc" id="L55">         predicatesList.add(builder.like(builder.lower(root.&lt;String&gt; get(&quot;imagePath&quot;)), '%' + imagePath.toLowerCase() + '%'));</span>
+      }
+<span class="nc" id="L57">      Product product = example.getProduct();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">      if (product != null)</span>
+      {
+<span class="nc" id="L60">         predicatesList.add(builder.equal(root.get(&quot;product&quot;), product));</span>
+      }
 
+<span class="nc" id="L63">      return predicatesList.toArray(new Predicate[predicatesList.size()]);</span>
+   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -8,38 +8,43 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 
 /**
- * @author Antonio Goncalves http://www.antoniogoncalves.org -- This interceptor
- * implements Serializable because it's used on a Stateful Session Bean who has
- * passivation and activation lifecycle.
+ * @author Antonio Goncalves
+ *         http://www.antoniogoncalves.org
+ *         --
+ *         This interceptor implements Serializable because it's used on a Stateful Session Bean who has
+ *         passivation and activation lifecycle.
  */
 
 @Loggable
 @Interceptor
-<span class="nc" id="L18">public class LoggingInterceptor implements Serializable {</span>
+<span class="nc" id="L20">public class LoggingInterceptor implements Serializable </span>
+{
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+    // ======================================
+    // =             Attributes             =
+    // ======================================
 
-	@Inject
-	private transient Logger logger;
+    @Inject
+    private transient Logger logger;
 
-	// ======================================
-	// = Business methods =
-	// ======================================
+    // ======================================
+    // =          Business methods          =
+    // ======================================
 
-	@AroundInvoke
-	private Object intercept(InvocationContext ic) throws Exception {
-<span class="nc" id="L33">		logger.entering(ic.getTarget().getClass().getName(), ic.getMethod().getName());</span>
-<span class="nc" id="L34">		logger.info(&quot;&gt;&gt;&gt; &quot; + ic.getTarget().getClass().getName() + &quot;-&quot; + ic.getMethod().getName());</span>
-		try {
-<span class="nc" id="L36">			return ic.proceed();</span>
-		}
-		finally {
-<span class="nc" id="L39">			logger.exiting(ic.getTarget().getClass().getName(), ic.getMethod().getName());</span>
-<span class="nc" id="L40">			logger.info(&quot;&lt;&lt;&lt; &quot; + ic.getTarget().getClass().getName() + &quot;-&quot; + ic.getMethod().getName());</span>
-		}
-	}
-
+    @AroundInvoke
+    private Object intercept(InvocationContext ic) throws Exception
+    {
+<span class="nc" id="L37">        logger.entering(ic.getTarget().getClass().getName(), ic.getMethod().getName());</span>
+<span class="nc" id="L38">        logger.info(&quot;&gt;&gt;&gt; &quot; + ic.getTarget().getClass().getName() + &quot;-&quot; + ic.getMethod().getName());</span>
+        try 
+        {
+<span class="nc" id="L41">            return ic.proceed();</span>
+        } 
+        finally 
+        {
+<span class="nc" id="L45">            logger.exiting(ic.getTarget().getClass().getName(), ic.getMethod().getName());</span>
+<span class="nc" id="L46">            logger.info(&quot;&lt;&lt;&lt; &quot; + ic.getTarget().getClass().getName() + &quot;-&quot; + ic.getMethod().getName());</span>
+        }
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

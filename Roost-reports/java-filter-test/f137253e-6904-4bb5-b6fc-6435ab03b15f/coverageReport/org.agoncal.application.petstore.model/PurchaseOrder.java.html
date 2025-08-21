@@ -12,235 +12,278 @@ import java.util.Set;
 @Entity
 @Table(name = &quot;purchase_order&quot;)
 @XmlRootElement
-@NamedQueries({ @NamedQuery(name = PurchaseOrder.FIND_ALL, query = &quot;SELECT o FROM PurchaseOrder o&quot;) })
-public class PurchaseOrder implements Serializable {
+@NamedQueries({
+         @NamedQuery(name = PurchaseOrder.FIND_ALL, query = &quot;SELECT o FROM PurchaseOrder o&quot;)
+})
+public class PurchaseOrder implements Serializable
+{
 
-	// ======================================
-	// = Attributes =
-	// ======================================
+   // ======================================
+   // = Attributes =
+   // ======================================
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = &quot;id&quot;, updatable = false, nullable = false)
-	private Long id;
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO)
+   @Column(name = &quot;id&quot;, updatable = false, nullable = false)
+   private Long id;
+   @Version
+   @Column(name = &quot;version&quot;)
+   private int version;
 
-	@Version
-	@Column(name = &quot;version&quot;)
-	private int version;
+   @Column(name = &quot;order_date&quot;, updatable = false)
+   @Temporal(TemporalType.DATE)
+   private Date orderDate;
 
-	@Column(name = &quot;order_date&quot;, updatable = false)
-	@Temporal(TemporalType.DATE)
-	private Date orderDate;
+   @Column
+   private Float totalWithoutVat;
 
-	@Column
-	private Float totalWithoutVat;
+   @Column(name = &quot;vat_rate&quot;)
+   private Float vatRate;
 
-	@Column(name = &quot;vat_rate&quot;)
-	private Float vatRate;
+   @Column
+   private Float vat;
 
-	@Column
-	private Float vat;
+   @Column
+   private Float totalWithVat;
 
-	@Column
-	private Float totalWithVat;
+   @Column(name = &quot;discount_rate&quot;)
+   private Float discountRate;
 
-	@Column(name = &quot;discount_rate&quot;)
-	private Float discountRate;
+   @Column
+   private Float discount;
 
-	@Column
-	private Float discount;
+   @Column
+   private Float total;
 
-	@Column
-	private Float total;
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = &quot;customer_fk&quot;, nullable = false)
+   private Customer customer;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = &quot;customer_fk&quot;, nullable = false)
-	private Customer customer;
+<span class="fc" id="L62">   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)</span>
+   @JoinTable(name = &quot;t_order_order_line&quot;, joinColumns = { @JoinColumn(name = &quot;order_fk&quot;) }, inverseJoinColumns = {
+            @JoinColumn(name = &quot;order_line_fk&quot;) })
+   private Set&lt;OrderLine&gt; orderLines = new HashSet&lt;OrderLine&gt;();
 
-<span class="fc" id="L60">	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)</span>
-	@JoinTable(name = &quot;t_order_order_line&quot;, joinColumns = { @JoinColumn(name = &quot;order_fk&quot;) },
-			inverseJoinColumns = { @JoinColumn(name = &quot;order_line_fk&quot;) })
-	private Set&lt;OrderLine&gt; orderLines = new HashSet&lt;OrderLine&gt;();
+<span class="fc" id="L67">   @Embedded</span>
+   @Valid
+   private Address deliveryAddress = new Address();
 
-<span class="fc" id="L65">	@Embedded</span>
-	@Valid
-	private Address deliveryAddress = new Address();
+<span class="fc" id="L71">   @Embedded</span>
+   @Valid
+   private CreditCard creditCard = new CreditCard();
 
-<span class="fc" id="L69">	@Embedded</span>
-	@Valid
-	private CreditCard creditCard = new CreditCard();
+   // ======================================
+   // = Constants =
+   // ======================================
 
-	// ======================================
-	// = Constants =
-	// ======================================
+   public static final String FIND_ALL = &quot;Order.findAll&quot;;
 
-	public static final String FIND_ALL = &quot;Order.findAll&quot;;
+   // ======================================
+   // = Constructors =
+   // ======================================
 
-	// ======================================
-	// = Constructors =
-	// ======================================
+   public PurchaseOrder()
+<span class="fc" id="L86">   {</span>
+<span class="fc" id="L87">   }</span>
 
-<span class="fc" id="L83">	public PurchaseOrder() {</span>
-<span class="fc" id="L84">	}</span>
+   public PurchaseOrder(Customer customer, CreditCard creditCard, Address deliveryAddress)
+<span class="fc" id="L90">   {</span>
+<span class="fc" id="L91">      this.customer = customer;</span>
+<span class="fc" id="L92">      this.creditCard = creditCard;</span>
+<span class="fc" id="L93">      this.deliveryAddress = deliveryAddress;</span>
+<span class="fc" id="L94">   }</span>
 
-<span class="fc" id="L86">	public PurchaseOrder(Customer customer, CreditCard creditCard, Address deliveryAddress) {</span>
-<span class="fc" id="L87">		this.customer = customer;</span>
-<span class="fc" id="L88">		this.creditCard = creditCard;</span>
-<span class="fc" id="L89">		this.deliveryAddress = deliveryAddress;</span>
-<span class="fc" id="L90">	}</span>
+   // ======================================
+   // = Lifecycle Methods =
+   // ======================================
 
-	// ======================================
-	// = Lifecycle Methods =
-	// ======================================
+   @PrePersist
+   private void setDefaultData()
+   {
+<span class="nc" id="L103">      orderDate = new Date();</span>
+<span class="nc" id="L104">   }</span>
 
-	@PrePersist
-	private void setDefaultData() {
-<span class="nc" id="L98">		orderDate = new Date();</span>
-<span class="nc" id="L99">	}</span>
+   // ======================================
+   // = Getters &amp; setters =
+   // ======================================
 
-	// ======================================
-	// = Getters &amp; setters =
-	// ======================================
+   public Long getId()
+   {
+<span class="nc" id="L112">      return this.id;</span>
+   }
 
-	public Long getId() {
-<span class="nc" id="L106">		return this.id;</span>
-	}
+   public void setId(final Long id)
+   {
+<span class="fc" id="L117">      this.id = id;</span>
+<span class="fc" id="L118">   }</span>
 
-	public void setId(final Long id) {
-<span class="fc" id="L110">		this.id = id;</span>
-<span class="fc" id="L111">	}</span>
+   public int getVersion()
+   {
+<span class="nc" id="L122">      return this.version;</span>
+   }
 
-	public int getVersion() {
-<span class="nc" id="L114">		return this.version;</span>
-	}
+   public void setVersion(final int version)
+   {
+<span class="fc" id="L127">      this.version = version;</span>
+<span class="fc" id="L128">   }</span>
 
-	public void setVersion(final int version) {
-<span class="fc" id="L118">		this.version = version;</span>
-<span class="fc" id="L119">	}</span>
+   public Date getOrderDate()
+   {
+<span class="fc" id="L132">      return orderDate;</span>
+   }
 
-	public Date getOrderDate() {
-<span class="fc" id="L122">		return orderDate;</span>
-	}
+   public void setOrderDate(Date orderDate)
+   {
+<span class="fc" id="L137">      this.orderDate = orderDate;</span>
+<span class="fc" id="L138">   }</span>
 
-	public void setOrderDate(Date orderDate) {
-<span class="fc" id="L126">		this.orderDate = orderDate;</span>
-<span class="fc" id="L127">	}</span>
+   public Float getTotalWithoutVat()
+   {
+<span class="nc" id="L142">      return totalWithoutVat;</span>
+   }
 
-	public Float getTotalWithoutVat() {
-<span class="nc" id="L130">		return totalWithoutVat;</span>
-	}
+   public void setTotalWithoutVat(Float totalWithoutVat)
+   {
+<span class="fc" id="L147">      this.totalWithoutVat = totalWithoutVat;</span>
+<span class="fc" id="L148">   }</span>
 
-	public void setTotalWithoutVat(Float totalWithoutVat) {
-<span class="fc" id="L134">		this.totalWithoutVat = totalWithoutVat;</span>
-<span class="fc" id="L135">	}</span>
+   public Float getVatRate()
+   {
+<span class="nc" id="L152">      return vatRate;</span>
+   }
 
-	public Float getVatRate() {
-<span class="nc" id="L138">		return vatRate;</span>
-	}
+   public void setVatRate(Float vatRate)
+   {
+<span class="fc" id="L157">      this.vatRate = vatRate;</span>
+<span class="fc" id="L158">   }</span>
 
-	public void setVatRate(Float vatRate) {
-<span class="fc" id="L142">		this.vatRate = vatRate;</span>
-<span class="fc" id="L143">	}</span>
+   public Float getVat()
+   {
+<span class="nc" id="L162">      return vat;</span>
+   }
 
-	public Float getVat() {
-<span class="nc" id="L146">		return vat;</span>
-	}
+   public void setVat(Float vat)
+   {
+<span class="fc" id="L167">      this.vat = vat;</span>
+<span class="fc" id="L168">   }</span>
 
-	public void setVat(Float vat) {
-<span class="fc" id="L150">		this.vat = vat;</span>
-<span class="fc" id="L151">	}</span>
+   public Float getTotalWithVat()
+   {
+<span class="nc" id="L172">      return totalWithVat;</span>
+   }
 
-	public Float getTotalWithVat() {
-<span class="nc" id="L154">		return totalWithVat;</span>
-	}
+   public void setTotalWithVat(Float totalWithVat)
+   {
+<span class="fc" id="L177">      this.totalWithVat = totalWithVat;</span>
+<span class="fc" id="L178">   }</span>
 
-	public void setTotalWithVat(Float totalWithVat) {
-<span class="fc" id="L158">		this.totalWithVat = totalWithVat;</span>
-<span class="fc" id="L159">	}</span>
+   public Float getDiscountRate()
+   {
+<span class="nc" id="L182">      return discountRate;</span>
+   }
 
-	public Float getDiscountRate() {
-<span class="nc" id="L162">		return discountRate;</span>
-	}
+   public void setDiscountRate(Float discountRate)
+   {
+<span class="fc" id="L187">      this.discountRate = discountRate;</span>
+<span class="fc" id="L188">   }</span>
 
-	public void setDiscountRate(Float discountRate) {
-<span class="fc" id="L166">		this.discountRate = discountRate;</span>
-<span class="fc" id="L167">	}</span>
+   public Float getDiscount()
+   {
+<span class="nc" id="L192">      return discount;</span>
+   }
 
-	public Float getDiscount() {
-<span class="nc" id="L170">		return discount;</span>
-	}
+   public void setDiscount(Float discount)
+   {
+<span class="fc" id="L197">      this.discount = discount;</span>
+<span class="fc" id="L198">   }</span>
 
-	public void setDiscount(Float discount) {
-<span class="fc" id="L174">		this.discount = discount;</span>
-<span class="fc" id="L175">	}</span>
+   public Float getTotal()
+   {
+<span class="nc" id="L202">      return total;</span>
+   }
 
-	public Float getTotal() {
-<span class="nc" id="L178">		return total;</span>
-	}
+   public void setTotal(Float total)
+   {
+<span class="fc" id="L207">      this.total = total;</span>
+<span class="fc" id="L208">   }</span>
 
-	public void setTotal(Float total) {
-<span class="fc" id="L182">		this.total = total;</span>
-<span class="fc" id="L183">	}</span>
+   public Customer getCustomer()
+   {
+<span class="nc" id="L212">      return this.customer;</span>
+   }
 
-	public Customer getCustomer() {
-<span class="nc" id="L186">		return this.customer;</span>
-	}
+   public void setCustomer(final Customer customer)
+   {
+<span class="fc" id="L217">      this.customer = customer;</span>
+<span class="fc" id="L218">   }</span>
 
-	public void setCustomer(final Customer customer) {
-<span class="fc" id="L190">		this.customer = customer;</span>
-<span class="fc" id="L191">	}</span>
+   public Set&lt;OrderLine&gt; getOrderLines()
+   {
+<span class="nc" id="L222">      return this.orderLines;</span>
+   }
 
-	public Set&lt;OrderLine&gt; getOrderLines() {
-<span class="nc" id="L194">		return this.orderLines;</span>
-	}
+   public void setOrderLines(final Set&lt;OrderLine&gt; orderLines)
+   {
+<span class="fc" id="L227">      this.orderLines = orderLines;</span>
+<span class="fc" id="L228">   }</span>
 
-	public void setOrderLines(final Set&lt;OrderLine&gt; orderLines) {
-<span class="fc" id="L198">		this.orderLines = orderLines;</span>
-<span class="fc" id="L199">	}</span>
+   public Address getDeliveryAddress()
+   {
+<span class="nc" id="L232">      return deliveryAddress;</span>
+   }
 
-	public Address getDeliveryAddress() {
-<span class="nc" id="L202">		return deliveryAddress;</span>
-	}
+   public void setDeliveryAddress(Address deliveryAddress)
+   {
+<span class="nc" id="L237">      this.deliveryAddress = deliveryAddress;</span>
+<span class="nc" id="L238">   }</span>
 
-	public void setDeliveryAddress(Address deliveryAddress) {
-<span class="nc" id="L206">		this.deliveryAddress = deliveryAddress;</span>
-<span class="nc" id="L207">	}</span>
+   public CreditCard getCreditCard()
+   {
+<span class="nc" id="L242">      return creditCard;</span>
+   }
 
-	public CreditCard getCreditCard() {
-<span class="nc" id="L210">		return creditCard;</span>
-	}
+   public void setCreditCard(CreditCard creditCard)
+   {
+<span class="nc" id="L247">      this.creditCard = creditCard;</span>
+<span class="nc" id="L248">   }</span>
 
-	public void setCreditCard(CreditCard creditCard) {
-<span class="nc" id="L214">		this.creditCard = creditCard;</span>
-<span class="nc" id="L215">	}</span>
+   // ======================================
+   // = Methods hash, equals, toString =
+   // ======================================
 
-	// ======================================
-	// = Methods hash, equals, toString =
-	// ======================================
 
-	@Override
-	public boolean equals(Object o) {
-<span class="pc bpc" id="L223" title="1 of 2 branches missed.">		if (this == o)</span>
-<span class="nc" id="L224">			return true;</span>
-<span class="fc bfc" id="L225" title="All 4 branches covered.">		if (o == null || getClass() != o.getClass())</span>
-<span class="fc" id="L226">			return false;</span>
-<span class="fc" id="L227">		PurchaseOrder that = (PurchaseOrder) o;</span>
-<span class="pc bpc" id="L228" title="1 of 4 branches missed.">		return orderDate.equals(that.orderDate) &amp;&amp; customer.equals(that.customer);</span>
-	}
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (this == o) return true;</span>
+<span class="fc bfc" id="L258" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L259">        PurchaseOrder that = (PurchaseOrder) o;</span>
+<span class="pc bpc" id="L260" title="1 of 4 branches missed.">        return orderDate.equals(that.orderDate) &amp;&amp; customer.equals(that.customer);</span>
+    }
 
-	@Override
-	public int hashCode() {
-<span class="nc" id="L233">		return Objects.hash(orderDate, customer);</span>
-	}
+    @Override
+    public int hashCode() {
+<span class="nc" id="L265">        return Objects.hash(orderDate, customer);</span>
+    }
 
-	@Override
-	public String toString() {
-<span class="fc" id="L238">		return &quot;PurchaseOrder{&quot; + &quot;id=&quot; + id + &quot;, version=&quot; + version + &quot;, orderDate=&quot; + orderDate</span>
-				+ &quot;, totalWithoutVat=&quot; + totalWithoutVat + &quot;, vatRate=&quot; + vatRate + &quot;, vat=&quot; + vat + &quot;, totalWithVat=&quot;
-				+ totalWithVat + &quot;, discountRate=&quot; + discountRate + &quot;, discount=&quot; + discount + &quot;, total=&quot; + total
-				+ &quot;, customer=&quot; + customer + &quot;, orderLines=&quot; + orderLines + &quot;, deliveryAddress=&quot; + deliveryAddress
-				+ &quot;, creditCard=&quot; + creditCard + '}';
-	}
-
+    @Override
+   public String toString()
+   {
+<span class="fc" id="L271">      return &quot;PurchaseOrder{&quot; +</span>
+               &quot;id=&quot; + id +
+               &quot;, version=&quot; + version +
+               &quot;, orderDate=&quot; + orderDate +
+               &quot;, totalWithoutVat=&quot; + totalWithoutVat +
+               &quot;, vatRate=&quot; + vatRate +
+               &quot;, vat=&quot; + vat +
+               &quot;, totalWithVat=&quot; + totalWithVat +
+               &quot;, discountRate=&quot; + discountRate +
+               &quot;, discount=&quot; + discount +
+               &quot;, total=&quot; + total +
+               &quot;, customer=&quot; + customer +
+               &quot;, orderLines=&quot; + orderLines +
+               &quot;, deliveryAddress=&quot; + deliveryAddress +
+               &quot;, creditCard=&quot; + creditCard +
+               '}';
+   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
